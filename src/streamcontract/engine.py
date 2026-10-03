@@ -87,7 +87,7 @@ class Engine:
         self.watermark: int | None = None
         self.windows: dict[int, dict[str, Bucket]] = {}
         self.finished = False
-        self.stats = {k: 0 for k in ("accepted", "invalid", "late", "windows", "failed", "insufficient")}
+        self.stats = {k: 0 for k in ("accepted", "invalid", "late", "windows", "failed", "insufficient", "finalized_events")}
 
     def _sequence(self, sequence: int | None) -> int:
         wanted = self.sequence + 1
@@ -180,6 +180,7 @@ class Engine:
                                         "max_absolute_delta": rule.max_absolute_delta, "min_samples": rule.min_samples}})
         status = "FAIL" if any(c["status"] == "FAIL" for c in checks) else "INSUFFICIENT" if any(c["status"] == "INSUFFICIENT" for c in checks) else "PASS"
         self.stats["windows"] += 1
+        self.stats["finalized_events"] += bucket.count
         self.stats["failed"] += status == "FAIL"
         self.stats["insufficient"] += status == "INSUFFICIENT"
         return {"kind": "window", "sequence": self.sequence, "status": status,
@@ -221,7 +222,7 @@ class Engine:
                     name: {"sum": rational(m.total), "min": rational(m.minimum), "max": rational(m.maximum)}
                     for name, m in sorted(bucket.values.items())}}
                 for group, bucket in sorted(groups.items())]})
-        payload = {"version": 1, "contract_sha256": self.contract.digest, "sequence": self.sequence,
+        payload = {"version": 2, "contract_sha256": self.contract.digest, "sequence": self.sequence,
                    "max_event_time": self.max_event_time, "watermark": self.watermark,
                    "stats": dict(self.stats), "finished": self.finished, "windows": windows, "source": source}
         result = canonical({"payload": payload, "sha256": hashlib.sha256(canonical(payload)).hexdigest()})
@@ -243,7 +244,7 @@ class Engine:
             if type(document["sha256"]) is not str or not hmac.compare_digest(document["sha256"], digest):
                 raise CheckpointError("checkpoint checksum mismatch")
             expected_keys = {"version", "contract_sha256", "sequence", "max_event_time", "watermark", "stats", "finished", "windows", "source"}
-            if type(payload) is not dict or set(payload) != expected_keys or payload["version"] != 1 or type(payload["version"]) is not int:
+            if type(payload) is not dict or set(payload) != expected_keys or payload["version"] != 2 or type(payload["version"]) is not int:
                 raise CheckpointError("invalid checkpoint payload")
             if payload["contract_sha256"] != contract.digest:
                 raise CheckpointError("checkpoint contract mismatch")
@@ -256,7 +257,10 @@ class Engine:
             stats = payload["stats"]
             if type(stats) is not dict or set(stats) != set(engine.stats) or any(type(v) is not int or not 0 <= v <= MAX_TIME for v in stats.values()):
                 raise CheckpointError("invalid checkpoint counters")
-            if stats["accepted"] + stats["invalid"] + stats["late"] != seq or stats["failed"] + stats["insufficient"] > stats["windows"]:
+            if (stats["accepted"] + stats["invalid"] + stats["late"] != seq
+                    or stats["failed"] + stats["insufficient"] > stats["windows"]
+                    or stats["windows"] > stats["finalized_events"]
+                    or (stats["windows"] == 0 and stats["finalized_events"] != 0)):
                 raise CheckpointError("inconsistent checkpoint counters")
             maximum, watermark = payload["max_event_time"], payload["watermark"]
             if stats["accepted"] == 0:
@@ -296,12 +300,21 @@ class Engine:
                         total, lo, hi = (read_rational(state[k]) for k in ("sum", "min", "max"))
                         if lo > hi or abs(lo) > MAX_NUMBER or abs(hi) > MAX_NUMBER or not count * lo <= total <= count * hi:
                             raise CheckpointError("inconsistent aggregate state")
+                        declaration = contract.fields[name]
+                        if ((declaration.minimum is not None and lo < Fraction(declaration.minimum))
+                                or (declaration.maximum is not None and hi > Fraction(declaration.maximum))
+                                or (declaration.type == "integer" and any(x.denominator != 1 for x in (total, lo, hi)))
+                                or (count == 1 and not lo == hi == total)
+                                or (count > 1 and not (count - 1) * lo + hi <= total <= lo + (count - 1) * hi)):
+                            raise CheckpointError("aggregate violates declared domain or extrema")
                         bucket.values[name] = Moments(total, lo, hi)
                     restored[key] = bucket
                     active_events += count
                 engine.windows[start] = restored
-            if active_events > stats["accepted"]:
-                raise CheckpointError("active events exceed accepted events")
+            if active_events + stats["finalized_events"] != stats["accepted"]:
+                raise CheckpointError("accepted-event conservation mismatch")
+            if not payload["finished"] and maximum is not None and maximum // contract.size_ms * contract.size_ms not in engine.windows:
+                raise CheckpointError("maximum event window missing")
             source = payload["source"]
             if source is not None:
                 if type(source) is not dict or set(source) != {"lines", "prefix_sha256"} or type(source["lines"]) is not int or source["lines"] != seq:

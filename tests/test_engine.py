@@ -22,6 +22,37 @@ def event(t, x=0, key="a"):
 
 
 class EngineTests(unittest.TestCase):
+    def rehash(self, document):
+        raw = json.dumps(document["payload"], sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
+        document["sha256"] = hashlib.sha256(raw).hexdigest()
+        return json.dumps(document).encode()
+
+    def test_checkpoint_cannot_lose_accepted_active_events(self):
+        e = Engine(Contract(spec()))
+        e.push(event(1))
+        document = json.loads(e.checkpoint())
+        document["payload"]["windows"] = []
+        with self.assertRaises(CheckpointError):
+            Engine.restore(e.contract, self.rehash(document))
+
+    def test_checkpoint_moments_respect_declared_field_domain(self):
+        e = Engine(Contract(spec()))
+        e.push(event(1, 10))
+        document = json.loads(e.checkpoint())
+        moments = document["payload"]["windows"][0]["groups"][0]["values"]["x"]
+        moments.update({"sum": [200, 1], "min": [200, 1], "max": [200, 1]})
+        with self.assertRaises(CheckpointError):
+            Engine.restore(e.contract, self.rehash(document))
+
+    def test_checkpoint_extrema_must_be_present_in_moments(self):
+        e = Engine(Contract(spec()))
+        e.push(event(1, 0))
+        e.push(event(2, 10))
+        document = json.loads(e.checkpoint())
+        document["payload"]["windows"][0]["groups"][0]["values"]["x"]["sum"] = [0, 1]
+        with self.assertRaises(CheckpointError):
+            Engine.restore(e.contract, self.rehash(document))
+
     def test_half_open_boundary(self):
         e = Engine(Contract(spec()))
         self.assertEqual(e.push(event(9))[0]["evidence"][0]["start_ms"], 0)
