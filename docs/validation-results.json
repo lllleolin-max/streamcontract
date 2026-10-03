@@ -22,14 +22,14 @@
   "commands": {
     "signed-zero-after": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_signed_zero_probe.py"
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
+        "{portfolio-workspace}\\reviews\\streamcontract_signed_zero_probe.py"
       ],
       "exit": 0
     },
     "tests": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
         "-m",
         "unittest",
         "discover",
@@ -41,49 +41,49 @@
     },
     "independent-probes": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_independent_probes.py"
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
+        "{portfolio-workspace}\\reviews\\streamcontract_independent_probes.py"
       ],
       "exit": 0
     },
     "checkpoint-domain": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_checkpoint_domain_probe.py"
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
+        "{portfolio-workspace}\\reviews\\streamcontract_checkpoint_domain_probe.py"
       ],
       "exit": 0
     },
     "numeric-rereview-probes": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_numeric_rereview_probes.py"
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
+        "{portfolio-workspace}\\reviews\\streamcontract_numeric_rereview_probes.py"
       ],
       "exit": 0
     },
     "sdk": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
         "examples/workflow.py"
       ],
       "exit": 0
     },
     "cli-workflow": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
         "examples/cli_workflow.py"
       ],
       "exit": 0
     },
     "benchmark": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
         "benchmarks/compare.py"
       ],
       "exit": 0
     },
     "outside-checkout-import": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+        "{repository}\\.venv-clean\\Scripts\\python.exe",
         "-c",
         "import streamcontract,importlib.metadata,json; d=importlib.metadata.distribution('streamcontract'); print(json.dumps({'version':streamcontract.__version__,'module':streamcontract.__file__,'license':d.metadata.get('License-Expression'),'direct_url':json.loads(d.read_text('direct_url.json') or '{}')}))"
       ],
@@ -91,7 +91,7 @@
     },
     "entrypoint": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
         "examples/contract.json",
         "--input",
@@ -101,193 +101,193 @@
     },
     "signed-zero-cli-full": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl"
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl"
       ],
       "exit": 2
     },
     "signed-zero-cli-pause-0": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--stop-after",
         "0",
         "--checkpoint",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     },
     "signed-zero-cli-resume-0": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--resume",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     },
     "signed-zero-cli-pause-1": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--stop-after",
         "1",
         "--checkpoint",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 0
     },
     "signed-zero-cli-resume-1": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--resume",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     },
     "signed-zero-cli-pause-2": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--stop-after",
         "2",
         "--checkpoint",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 0
     },
     "signed-zero-cli-resume-2": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--resume",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     },
     "signed-zero-cli-pause-3": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--stop-after",
         "3",
         "--checkpoint",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 0
     },
     "signed-zero-cli-resume-3": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--resume",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     },
     "signed-zero-cli-pause-4": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--stop-after",
         "4",
         "--checkpoint",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 0
     },
     "signed-zero-cli-resume-4": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--resume",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     },
     "signed-zero-cli-pause-5": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--stop-after",
         "5",
         "--checkpoint",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 0
     },
     "signed-zero-cli-resume-5": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--resume",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     },
     "signed-zero-cli-pause-6": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--stop-after",
         "6",
         "--checkpoint",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     },
     "signed-zero-cli-resume-6": {
       "command": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "{repository}\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "{repository}\\run-output\\signed-zero-cli\\contract.json",
         "--input",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "{repository}\\run-output\\signed-zero-cli\\events.jsonl",
         "--resume",
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+        "{repository}\\run-output\\signed-zero-cli\\checkpoint.json"
       ],
       "exit": 2
     }

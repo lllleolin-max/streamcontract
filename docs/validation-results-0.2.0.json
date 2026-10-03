@@ -21,7 +21,7 @@
   "commands": {
     "checkpoint-domain-after": {
       "arguments": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_checkpoint_domain_probe.py"
+        "{portfolio-workspace}\\reviews\\streamcontract_checkpoint_domain_probe.py"
       ],
       "exit": 0
     },
@@ -38,7 +38,7 @@
     },
     "independent-probes": {
       "arguments": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_independent_probes.py"
+        "{portfolio-workspace}\\reviews\\streamcontract_independent_probes.py"
       ],
       "exit": 0
     },

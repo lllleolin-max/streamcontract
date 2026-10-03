@@ -2,8 +2,8 @@
   "version": "0.2.0",
   "script_sha256": "7bb8407fea8bee358ca175c0b375bcd83ebd276598f7131fff632064370e5017",
   "command": [
-    "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
-    "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_checkpoint_domain_probe.py"
+    "{repository}\\.venv-clean\\Scripts\\python.exe",
+    "{portfolio-workspace}\\reviews\\streamcontract_checkpoint_domain_probe.py"
   ],
   "exit": 0,
   "results": [
