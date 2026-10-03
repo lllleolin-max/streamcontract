@@ -1,0 +1,441 @@
+{
+  "verified_date": "2026-10-03",
+  "version": "0.2.0",
+  "checkpoint_format": 3,
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3",
+    "module": ".venv-clean/Lib/site-packages/streamcontract/__init__.py",
+    "license_expression": "MIT",
+    "editable": false
+  },
+  "before_commit": "9ab3793e47330776dea6028a28a578818ca0b4c9",
+  "implementation_commit": "d107ebb9044dbf8df5bba5ae6edbc7d04fd6a4f2",
+  "source_sha256": {
+    "src/streamcontract/__init__.py": "aa0d91ba35c5b128cd49d4046aa9bbff41372ebe06108d9ba79c75cea35ee0a5",
+    "src/streamcontract/cli.py": "16e943c2f12a1619af18348eba3291128b732fe89f63b304750ceafc9fc3b68e",
+    "src/streamcontract/contract.py": "cf9eb96118e17f10065a3e5a11d7d5b5863d642cc4720db1172331cb9584a4a1",
+    "src/streamcontract/engine.py": "a6a10382abad8e5eecd3d59ea615aee09232de76be50aef305e7515a6c88f378",
+    "src/streamcontract/moments.py": "9db3cd7f1a8bfbfdd62554f58d7e327bf19b1d2c012c1a4df69957e2869baade"
+  },
+  "commands": {
+    "checkpoint-domain-after": {
+      "arguments": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_checkpoint_domain_probe.py"
+      ],
+      "exit": 0
+    },
+    "tests": {
+      "arguments": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit": 0
+    },
+    "independent-probes": {
+      "arguments": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_independent_probes.py"
+      ],
+      "exit": 0
+    },
+    "sdk": {
+      "arguments": [
+        "examples/workflow.py"
+      ],
+      "exit": 0
+    },
+    "cli-workflow": {
+      "arguments": [
+        "examples/cli_workflow.py"
+      ],
+      "exit": 0
+    },
+    "benchmark": {
+      "arguments": [
+        "benchmarks/compare.py"
+      ],
+      "exit": 0
+    },
+    "outside-checkout-import": {
+      "arguments": [
+        "-c",
+        "import streamcontract,importlib.metadata,json; print(json.dumps({'version':streamcontract.__version__,'module':streamcontract.__file__,'license':importlib.metadata.metadata('streamcontract').get('License-Expression')}))"
+      ],
+      "exit": 0
+    },
+    "entrypoint": {
+      "arguments": [
+        "streamcontract",
+        "--contract",
+        "examples/contract.json",
+        "--input",
+        "examples/events.jsonl"
+      ],
+      "exit": 2
+    }
+  },
+  "test_summary": [
+    "----------------------------------------------------------------------",
+    "Ran 49 tests in 3.121s",
+    "",
+    "OK"
+  ],
+  "independent_probe_summary": [
+    "----------------------------------------------------------------------",
+    "Ran 6 tests in 2.199s",
+    "",
+    "OK"
+  ],
+  "domain_probe": {
+    "before_exit": 1,
+    "after_exit": 0,
+    "same_script_sha256": "7bb8407fea8bee358ca175c0b375bcd83ebd276598f7131fff632064370e5017"
+  },
+  "sdk": {
+    "resumed_equal": true,
+    "checkpoint_bytes": 1117,
+    "summary": {
+      "kind": "summary",
+      "status": "ISSUES",
+      "action": "quarantine",
+      "sequence": 11,
+      "contract_sha256": "dcfd6dc8ea629c75147dd6ba4187d920009aa860563cb7921c4adb91537ccc20",
+      "watermark_ms": 2300,
+      "stats": {
+        "accepted": 9,
+        "invalid": 1,
+        "late": 1,
+        "windows": 3,
+        "failed": 1,
+        "insufficient": 0,
+        "finalized_events": 9
+      },
+      "active_windows": 0,
+      "active_groups": 0,
+      "finished": true
+    }
+  },
+  "cli": {
+    "input_records": 11,
+    "full_exit": 2,
+    "pause_exit": 0,
+    "resume_exit": 2,
+    "corrupt_exit": 3,
+    "source_prefix_verified": true,
+    "decisions_equal": true,
+    "summary": {
+      "action": "quarantine",
+      "active_groups": 0,
+      "active_windows": 0,
+      "contract_sha256": "dcfd6dc8ea629c75147dd6ba4187d920009aa860563cb7921c4adb91537ccc20",
+      "finished": true,
+      "kind": "summary",
+      "sequence": 11,
+      "stats": {
+        "accepted": 9,
+        "failed": 1,
+        "finalized_events": 9,
+        "insufficient": 0,
+        "invalid": 1,
+        "late": 1,
+        "windows": 3
+      },
+      "status": "ISSUES",
+      "watermark_ms": 2300
+    }
+  },
+  "benchmark": {
+    "fixture": "disclosed synthetic; no incumbents executed",
+    "scenarios": [
+      {
+        "scenario": "drift_hidden_in_arrival_mix",
+        "records": 6,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "event_time": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "ablation_no_aggregate": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 2,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 5
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "clean_bounded_disorder",
+        "records": 6,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "event_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "ablation_no_aggregate": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 5
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "adverse_too_small_watermark_delay",
+        "records": 4,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "event_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "ablation_no_aggregate": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "declared_late_after_close",
+        "records": 4,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "event_time": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "ablation_no_aggregate": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "empty",
+        "records": 0,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "EMPTY",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 0
+        },
+        "event_time": {
+          "status": "EMPTY",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 0
+        },
+        "ablation_no_aggregate": {
+          "status": "EMPTY",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 0
+        },
+        "ablation_no_disorder_budget": {
+          "status": "EMPTY",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 0
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "exact_half_open_boundary",
+        "records": 4,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "event_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "ablation_no_aggregate": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "invalid_row_cannot_advance_watermark",
+        "records": 3,
+        "batch_shape": {
+          "invalid": 1,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "ISSUES",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 2
+        },
+        "event_time": {
+          "status": "ISSUES",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 2
+        },
+        "ablation_no_aggregate": {
+          "status": "ISSUES",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 2
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 2
+        },
+        "resume_equal": true
+      }
+    ],
+    "cardinality_limit": {
+      "offered_records": 10000,
+      "consumed": 16,
+      "next_sequence": 17,
+      "active_groups": 16,
+      "python_allocation_peak_bytes": 18275,
+      "seconds": 0.001463299966417253
+    }
+  },
+  "remote_ci": "not yet published/executed",
+  "python_311_runtime": "not available locally",
+  "independent_scores": "prior frozen 0.1.0: 83/65/83 FAIL; repaired 0.2.0 re-review pending",
+  "verification_context": "Commands ran on the identical source working tree immediately before the correction commit; recorded SHA-256 values match all committed library sources."
+}

@@ -1,0 +1,12 @@
+{
+  "artifact_commit": "8331d4107244b096298adc56bb071d4651fbff68",
+  "version": "0.2.0",
+  "script_sha256": "69ea74ca52ddfc466608ff078c8d5b53cde2ac2a20d3021b9d707a95d584a294",
+  "installed_engine_and_moments_match_frozen_commit": true,
+  "command": [
+    "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+    "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_signed_zero_probe.py"
+  ],
+  "exit": 1,
+  "stdout": "{\r\n  \"event_validity\": [],\r\n  \"push\": [\r\n    {\r\n      \"kind\": \"event\",\r\n      \"sequence\": 1,\r\n      \"status\": \"ACCEPTED\",\r\n      \"action\": \"stage\",\r\n      \"evidence\": [\r\n        {\r\n          \"code\": \"window_assignment\",\r\n          \"start_ms\": 0,\r\n          \"end_ms\": 10,\r\n          \"group_sha256\": \"7bf21b3c3ebc8a257d2618abe4d23978afbc5fb90fc183ab67326150f8ba378c\",\r\n          \"behind_watermark\": false\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"checkpoint_version\": 3\r\n}\r\n{\"genuine_checkpoint_restored\": false, \"error\": \"group digest differs from retained numeric grouping witness\"}\r\n"
+}

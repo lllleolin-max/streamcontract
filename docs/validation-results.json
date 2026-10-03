@@ -1,6 +1,6 @@
 {
   "verified_date": "2026-10-03",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "checkpoint_format": 3,
   "environment": {
     "platform": "Windows-11-10.0.26200-SP0",
@@ -9,24 +9,27 @@
     "license_expression": "MIT",
     "editable": false
   },
-  "before_commit": "9ab3793e47330776dea6028a28a578818ca0b4c9",
-  "implementation_commit": "d107ebb9044dbf8df5bba5ae6edbc7d04fd6a4f2",
+  "before_commit": "8331d4107244b096298adc56bb071d4651fbff68",
+  "implementation_commit": "4ee9553a068dd86196119f7106f2b1989082f146",
+  "wheel_sha256": "66be1d20c635c59cc113a652e83de4860e0d67c56cc973635b6d91eb5f98af49",
   "source_sha256": {
-    "src/streamcontract/__init__.py": "aa0d91ba35c5b128cd49d4046aa9bbff41372ebe06108d9ba79c75cea35ee0a5",
+    "src/streamcontract/__init__.py": "27f1115578c5bb6ccee138332c7c9cbc546e0776cc91063744463bc06210ecef",
     "src/streamcontract/cli.py": "16e943c2f12a1619af18348eba3291128b732fe89f63b304750ceafc9fc3b68e",
     "src/streamcontract/contract.py": "cf9eb96118e17f10065a3e5a11d7d5b5863d642cc4720db1172331cb9584a4a1",
-    "src/streamcontract/engine.py": "a6a10382abad8e5eecd3d59ea615aee09232de76be50aef305e7515a6c88f378",
-    "src/streamcontract/moments.py": "9db3cd7f1a8bfbfdd62554f58d7e327bf19b1d2c012c1a4df69957e2869baade"
+    "src/streamcontract/engine.py": "807b60e0d9bdffb2ed1d2c16d3cf4deef9c81156d95d277efe620f67907a8fbd",
+    "src/streamcontract/moments.py": "4a9bbb5d11f9433d6a79242242afed279e37575c62bcf5922021d1b3812b9b5c"
   },
   "commands": {
-    "checkpoint-domain-after": {
-      "arguments": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_checkpoint_domain_probe.py"
+    "signed-zero-after": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_signed_zero_probe.py"
       ],
       "exit": 0
     },
     "tests": {
-      "arguments": [
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
         "-m",
         "unittest",
         "discover",
@@ -37,63 +40,286 @@
       "exit": 0
     },
     "independent-probes": {
-      "arguments": [
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
         "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_independent_probes.py"
       ],
       "exit": 0
     },
+    "checkpoint-domain": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_checkpoint_domain_probe.py"
+      ],
+      "exit": 0
+    },
+    "numeric-rereview-probes": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_numeric_rereview_probes.py"
+      ],
+      "exit": 0
+    },
     "sdk": {
-      "arguments": [
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
         "examples/workflow.py"
       ],
       "exit": 0
     },
     "cli-workflow": {
-      "arguments": [
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
         "examples/cli_workflow.py"
       ],
       "exit": 0
     },
     "benchmark": {
-      "arguments": [
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
         "benchmarks/compare.py"
       ],
       "exit": 0
     },
     "outside-checkout-import": {
-      "arguments": [
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
         "-c",
-        "import streamcontract,importlib.metadata,json; print(json.dumps({'version':streamcontract.__version__,'module':streamcontract.__file__,'license':importlib.metadata.metadata('streamcontract').get('License-Expression')}))"
+        "import streamcontract,importlib.metadata,json; d=importlib.metadata.distribution('streamcontract'); print(json.dumps({'version':streamcontract.__version__,'module':streamcontract.__file__,'license':d.metadata.get('License-Expression'),'direct_url':json.loads(d.read_text('direct_url.json') or '{}')}))"
       ],
       "exit": 0
     },
     "entrypoint": {
-      "arguments": [
-        "streamcontract",
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
         "--contract",
         "examples/contract.json",
         "--input",
         "examples/events.jsonl"
       ],
       "exit": 2
+    },
+    "signed-zero-cli-full": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-pause-0": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--stop-after",
+        "0",
+        "--checkpoint",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-resume-0": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--resume",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-pause-1": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--stop-after",
+        "1",
+        "--checkpoint",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 0
+    },
+    "signed-zero-cli-resume-1": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--resume",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-pause-2": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--stop-after",
+        "2",
+        "--checkpoint",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 0
+    },
+    "signed-zero-cli-resume-2": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--resume",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-pause-3": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--stop-after",
+        "3",
+        "--checkpoint",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 0
+    },
+    "signed-zero-cli-resume-3": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--resume",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-pause-4": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--stop-after",
+        "4",
+        "--checkpoint",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 0
+    },
+    "signed-zero-cli-resume-4": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--resume",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-pause-5": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--stop-after",
+        "5",
+        "--checkpoint",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 0
+    },
+    "signed-zero-cli-resume-5": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--resume",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-pause-6": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--stop-after",
+        "6",
+        "--checkpoint",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
+    },
+    "signed-zero-cli-resume-6": {
+      "command": [
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\streamcontract.exe",
+        "--contract",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\contract.json",
+        "--input",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\events.jsonl",
+        "--resume",
+        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\run-output\\signed-zero-cli\\checkpoint.json"
+      ],
+      "exit": 2
     }
   },
   "test_summary": [
     "----------------------------------------------------------------------",
-    "Ran 49 tests in 3.121s",
+    "Ran 56 tests in 3.857s",
     "",
     "OK"
   ],
   "independent_probe_summary": [
     "----------------------------------------------------------------------",
-    "Ran 6 tests in 2.199s",
+    "Ran 6 tests in 1.193s",
     "",
     "OK"
   ],
-  "domain_probe": {
+  "numeric_probe_summary": [
+    "----------------------------------------------------------------------",
+    "Ran 6 tests in 0.085s",
+    "",
+    "OK"
+  ],
+  "signed_zero_probe": {
     "before_exit": 1,
     "after_exit": 0,
-    "same_script_sha256": "7bb8407fea8bee358ca175c0b375bcd83ebd276598f7131fff632064370e5017"
+    "same_script_sha256": "69ea74ca52ddfc466608ff078c8d5b53cde2ac2a20d3021b9d707a95d584a294"
+  },
+  "unchanged_peer_sha256": {
+    "streamcontract_signed_zero_probe.py": "69ea74ca52ddfc466608ff078c8d5b53cde2ac2a20d3021b9d707a95d584a294",
+    "streamcontract_checkpoint_domain_probe.py": "7bb8407fea8bee358ca175c0b375bcd83ebd276598f7131fff632064370e5017",
+    "streamcontract_numeric_rereview_probes.py": "4fe977ef824b035304348b431da39b27a14f92b3445376ad9851fcd378f0226c",
+    "streamcontract_independent_probes.py": "bf5dd5431398a718d9ed2e1638e33dcd2f00972dfd018785c69819a3e6f44757"
   },
   "sdk": {
     "resumed_equal": true,
@@ -146,6 +372,81 @@
       },
       "status": "ISSUES",
       "watermark_ms": 2300
+    }
+  },
+  "signed_zero_cli": {
+    "input_records": 6,
+    "full_exit": 2,
+    "comparisons": [
+      {
+        "cut": 0,
+        "pause_exit": 2,
+        "resume_exit": 2,
+        "prefix_verified": true,
+        "decisions_equal": true
+      },
+      {
+        "cut": 1,
+        "pause_exit": 0,
+        "resume_exit": 2,
+        "prefix_verified": true,
+        "decisions_equal": true
+      },
+      {
+        "cut": 2,
+        "pause_exit": 0,
+        "resume_exit": 2,
+        "prefix_verified": true,
+        "decisions_equal": true
+      },
+      {
+        "cut": 3,
+        "pause_exit": 0,
+        "resume_exit": 2,
+        "prefix_verified": true,
+        "decisions_equal": true
+      },
+      {
+        "cut": 4,
+        "pause_exit": 0,
+        "resume_exit": 2,
+        "prefix_verified": true,
+        "decisions_equal": true
+      },
+      {
+        "cut": 5,
+        "pause_exit": 0,
+        "resume_exit": 2,
+        "prefix_verified": true,
+        "decisions_equal": true
+      },
+      {
+        "cut": 6,
+        "pause_exit": 2,
+        "resume_exit": 2,
+        "prefix_verified": true,
+        "decisions_equal": true
+      }
+    ],
+    "summary": {
+      "action": "quarantine",
+      "active_groups": 0,
+      "active_windows": 0,
+      "contract_sha256": "6323dd04336f91c47fe93c763d0f222eb1c432b367c531476367d6933860510c",
+      "finished": true,
+      "kind": "summary",
+      "sequence": 6,
+      "stats": {
+        "accepted": 5,
+        "failed": 0,
+        "finalized_events": 5,
+        "insufficient": 0,
+        "invalid": 0,
+        "late": 1,
+        "windows": 5
+      },
+      "status": "ISSUES",
+      "watermark_ms": 12
     }
   },
   "benchmark": {
@@ -431,11 +732,11 @@
       "next_sequence": 17,
       "active_groups": 16,
       "python_allocation_peak_bytes": 18275,
-      "seconds": 0.001463299966417253
+      "seconds": 0.0026283999904990196
     }
   },
   "remote_ci": "not yet published/executed",
   "python_311_runtime": "not available locally",
-  "independent_scores": "prior frozen 0.1.0: 83/65/83 FAIL; repaired 0.2.0 re-review pending",
-  "verification_context": "Commands ran on the identical source working tree immediately before the correction commit; recorded SHA-256 values match all committed library sources."
+  "independent_scores": "prior 0.1.0:83/65/83 FAIL; prior 0.2.0:84/65/84 FAIL; repaired 0.2.1 re-review pending",
+  "verification_context": "Commands ran on the identical library sources immediately before the correction commit; recorded SHA-256 values match all five committed library source files and the installed wheel contents."
 }

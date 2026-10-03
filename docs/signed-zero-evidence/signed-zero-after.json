@@ -1,0 +1,11 @@
+{
+  "version": "0.2.1",
+  "script_sha256": "69ea74ca52ddfc466608ff078c8d5b53cde2ac2a20d3021b9d707a95d584a294",
+  "command": [
+    "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\streamcontract\\.venv-clean\\Scripts\\python.exe",
+    "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_signed_zero_probe.py"
+  ],
+  "exit": 0,
+  "stdout": "{\r\n  \"event_validity\": [],\r\n  \"push\": [\r\n    {\r\n      \"kind\": \"event\",\r\n      \"sequence\": 1,\r\n      \"status\": \"ACCEPTED\",\r\n      \"action\": \"stage\",\r\n      \"evidence\": [\r\n        {\r\n          \"code\": \"window_assignment\",\r\n          \"start_ms\": 0,\r\n          \"end_ms\": 10,\r\n          \"group_sha256\": \"7bf21b3c3ebc8a257d2618abe4d23978afbc5fb90fc183ab67326150f8ba378c\",\r\n          \"behind_watermark\": false\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"checkpoint_version\": 3\r\n}\r\n{\r\n  \"genuine_checkpoint_restored\": true,\r\n  \"finish\": [\r\n    {\r\n      \"kind\": \"window\",\r\n      \"sequence\": 1,\r\n      \"status\": \"PASS\",\r\n      \"action\": \"release\",\r\n      \"evidence\": {\r\n        \"start_ms\": 0,\r\n        \"end_ms\": 10,\r\n        \"group_sha256\": \"7bf21b3c3ebc8a257d2618abe4d23978afbc5fb90fc183ab67326150f8ba378c\",\r\n        \"trigger\": \"end_of_stream\",\r\n        \"watermark_ms\": -9,\r\n        \"sample_count\": 1,\r\n        \"checks\": [\r\n          {\r\n            \"name\": \"mean\",\r\n            \"op\": \"mean\",\r\n            \"observed\": 0.0,\r\n            \"status\": \"PASS\",\r\n            \"reasons\": [],\r\n            \"sample_count\": 1,\r\n            \"expected\": {\r\n              \"min\": -1,\r\n              \"max\": 1,\r\n              \"reference\": null,\r\n              \"max_absolute_delta\": null,\r\n              \"min_samples\": 1\r\n            }\r\n          }\r\n        ]\r\n      }\r\n    }\r\n  ]\r\n}\r\n",
+  "implementation_commit": "4ee9553a068dd86196119f7106f2b1989082f146"
+}

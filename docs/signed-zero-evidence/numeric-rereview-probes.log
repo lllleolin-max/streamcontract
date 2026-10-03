@@ -1,0 +1,17 @@
+independent typed enum realizations: 55
+100m: 2 bytes 802 restore seconds 9.200000204145908e-05
+100m: 0.1 bytes 1033 restore seconds 0.0001373999984934926
+100m: 5e-324 bytes 2782 restore seconds 0.00015320000238716602
+100m: 1000000000000000.0 bytes 945 restore seconds 0.00011690007522702217
+independent binary multiset realizations: 241
+test_enum_independent_multisets_and_nonconvex_residual (__main__.MathTests.test_enum_independent_multisets_and_nonconvex_residual) ... ok
+test_hundred_million_sample_witnesses_with_constant_size (__main__.MathTests.test_hundred_million_sample_witnesses_with_constant_size) ... ok
+test_normal_negative_subnormal_binade_boundary_multisets (__main__.MathTests.test_normal_negative_subnormal_binade_boundary_multisets) ... ok
+test_root_and_proof_both_rehashed_off_lattice_sum (__main__.MathTests.test_root_and_proof_both_rehashed_off_lattice_sum) ... ok
+test_strata_atomic_resource_and_int_float_identity (__main__.MathTests.test_strata_atomic_resource_and_int_float_identity) ... ok
+test_time_witness_and_root_global_max_group_invariants (__main__.MathTests.test_time_witness_and_root_global_max_group_invariants) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.085s
+
+OK

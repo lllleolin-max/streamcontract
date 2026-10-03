@@ -1,0 +1,75 @@
+{
+  "input_records": 6,
+  "full_exit": 2,
+  "comparisons": [
+    {
+      "cut": 0,
+      "pause_exit": 2,
+      "resume_exit": 2,
+      "prefix_verified": true,
+      "decisions_equal": true
+    },
+    {
+      "cut": 1,
+      "pause_exit": 0,
+      "resume_exit": 2,
+      "prefix_verified": true,
+      "decisions_equal": true
+    },
+    {
+      "cut": 2,
+      "pause_exit": 0,
+      "resume_exit": 2,
+      "prefix_verified": true,
+      "decisions_equal": true
+    },
+    {
+      "cut": 3,
+      "pause_exit": 0,
+      "resume_exit": 2,
+      "prefix_verified": true,
+      "decisions_equal": true
+    },
+    {
+      "cut": 4,
+      "pause_exit": 0,
+      "resume_exit": 2,
+      "prefix_verified": true,
+      "decisions_equal": true
+    },
+    {
+      "cut": 5,
+      "pause_exit": 0,
+      "resume_exit": 2,
+      "prefix_verified": true,
+      "decisions_equal": true
+    },
+    {
+      "cut": 6,
+      "pause_exit": 2,
+      "resume_exit": 2,
+      "prefix_verified": true,
+      "decisions_equal": true
+    }
+  ],
+  "summary": {
+    "action": "quarantine",
+    "active_groups": 0,
+    "active_windows": 0,
+    "contract_sha256": "6323dd04336f91c47fe93c763d0f222eb1c432b367c531476367d6933860510c",
+    "finished": true,
+    "kind": "summary",
+    "sequence": 6,
+    "stats": {
+      "accepted": 5,
+      "failed": 0,
+      "finalized_events": 5,
+      "insufficient": 0,
+      "invalid": 0,
+      "late": 1,
+      "windows": 5
+    },
+    "status": "ISSUES",
+    "watermark_ms": 12
+  }
+}

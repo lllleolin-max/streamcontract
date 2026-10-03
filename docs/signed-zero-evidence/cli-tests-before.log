@@ -1,0 +1,74 @@
+test_changed_source_prefix_rejected (test_cli.CliTests.test_changed_source_prefix_rejected) ... ok
+test_checkpoint_cannot_overwrite_input_or_contract (test_cli.CliTests.test_checkpoint_cannot_overwrite_input_or_contract) ... ok
+test_checkpoint_hardlink_alias_rejects (test_cli.CliTests.test_checkpoint_hardlink_alias_rejects) ... ok
+test_cli_resume_matches_full (test_cli.CliTests.test_cli_resume_matches_full) ... ok
+test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) ...
+  test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=1) ... FAIL
+  test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=2) ... FAIL
+  test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=3) ... FAIL
+  test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=4) ... FAIL
+  test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=5) ... FAIL
+  test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=6) ... FAIL
+test_huge_integer_emits_disposition_then_continues (test_cli.CliTests.test_huge_integer_emits_disposition_then_continues) ... ok
+test_malformed_lines_are_reported_not_dropped (test_cli.CliTests.test_malformed_lines_are_reported_not_dropped) ... ok
+test_oversized_line_bounded_and_next_line_read (test_cli.CliTests.test_oversized_line_bounded_and_next_line_read) ... ok
+test_resource_checkpoint_excludes_unconsumed_line (test_cli.CliTests.test_resource_checkpoint_excludes_unconsumed_line) ... ok
+
+======================================================================
+FAIL: test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_cli.py", line 51, in test_cli_signed_zero_numeric_groups_every_resume_cut
+    self.assertEqual(resumed_code, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 2
+
+======================================================================
+FAIL: test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_cli.py", line 51, in test_cli_signed_zero_numeric_groups_every_resume_cut
+    self.assertEqual(resumed_code, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 2
+
+======================================================================
+FAIL: test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_cli.py", line 51, in test_cli_signed_zero_numeric_groups_every_resume_cut
+    self.assertEqual(resumed_code, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 2
+
+======================================================================
+FAIL: test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_cli.py", line 51, in test_cli_signed_zero_numeric_groups_every_resume_cut
+    self.assertEqual(resumed_code, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 2
+
+======================================================================
+FAIL: test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_cli.py", line 51, in test_cli_signed_zero_numeric_groups_every_resume_cut
+    self.assertEqual(resumed_code, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 2
+
+======================================================================
+FAIL: test_cli_signed_zero_numeric_groups_every_resume_cut (test_cli.CliTests.test_cli_signed_zero_numeric_groups_every_resume_cut) (cut=6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_cli.py", line 51, in test_cli_signed_zero_numeric_groups_every_resume_cut
+    self.assertEqual(resumed_code, code)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 2
+
+----------------------------------------------------------------------
+Ran 9 tests in 3.680s
+
+FAILED (failures=6)

@@ -1,0 +1,1 @@
+{"action":"investigate","active_groups":0,"active_windows":0,"contract_sha256":"6323dd04336f91c47fe93c763d0f222eb1c432b367c531476367d6933860510c","finished":false,"kind":"summary","sequence":0,"stats":{"accepted":0,"failed":0,"finalized_events":0,"insufficient":0,"invalid":0,"late":0,"windows":0},"status":"EMPTY","watermark_ms":null}

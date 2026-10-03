@@ -1,0 +1,236 @@
+test_eight_zero_number_keys_restore_with_finite_candidate_bound (test_numeric_grouping.NumericGrouping.test_eight_zero_number_keys_restore_with_finite_candidate_bound) ... ERROR
+test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) ...
+  test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=2) ... ERROR
+  test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=3) ... ERROR
+  test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=4) ... ERROR
+  test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=5) ... ERROR
+  test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=6) ... ERROR
+test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) ...
+  test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=1) ... ERROR
+  test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=2) ... ERROR
+  test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=3) ... ERROR
+  test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=4) ... ERROR
+  test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=5) ... ERROR
+  test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=6) ... ERROR
+  test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=7) ... ERROR
+  test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=8) ... ERROR
+test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) ...
+  test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) (field={'type': 'number', 'min': 0, 'max': 0}, primitive=2) ... ERROR
+  test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) (field={'type': 'number', 'enum': [0.0]}, primitive=2) ... ERROR
+  test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) (field={'type': 'number', 'enum': [-0.0]}, primitive=2) ... ERROR
+  test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) (field={'type': 'number', 'enum': [0, 0.0]}, primitive=2) ... ERROR
+test_zero_primitives_have_distinct_recoverable_groups (test_numeric_grouping.NumericGrouping.test_zero_primitives_have_distinct_recoverable_groups) ... ERROR
+
+======================================================================
+ERROR: test_eight_zero_number_keys_restore_with_finite_candidate_bound (test_numeric_grouping.NumericGrouping.test_eight_zero_number_keys_restore_with_finite_candidate_bound)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 118, in test_eight_zero_number_keys_restore_with_finite_candidate_bound
+    restored, _ = Engine.restore(contract, raw)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_mixed_numeric_key_tuples_and_every_resume_cut (test_numeric_grouping.NumericGrouping.test_mixed_numeric_key_tuples_and_every_resume_cut) (cut=6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=7)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_signed_zero_every_resume_cut_across_windows_and_late_records (test_numeric_grouping.NumericGrouping.test_signed_zero_every_resume_cut_across_windows_and_late_records) (cut=8)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 34, in assert_every_cut
+    restored, _ = Engine.restore(contract, raw, expected_sequence=cut)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) (field={'type': 'number', 'min': 0, 'max': 0}, primitive=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 82, in test_typed_zero_enums_and_ranges_keep_accepted_representations
+    restored, _ = Engine.restore(contract, raw)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) (field={'type': 'number', 'enum': [0.0]}, primitive=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 82, in test_typed_zero_enums_and_ranges_keep_accepted_representations
+    restored, _ = Engine.restore(contract, raw)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) (field={'type': 'number', 'enum': [-0.0]}, primitive=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 82, in test_typed_zero_enums_and_ranges_keep_accepted_representations
+    restored, _ = Engine.restore(contract, raw)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_typed_zero_enums_and_ranges_keep_accepted_representations (test_numeric_grouping.NumericGrouping.test_typed_zero_enums_and_ranges_keep_accepted_representations) (field={'type': 'number', 'enum': [0, 0.0]}, primitive=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 82, in test_typed_zero_enums_and_ranges_keep_accepted_representations
+    restored, _ = Engine.restore(contract, raw)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+======================================================================
+ERROR: test_zero_primitives_have_distinct_recoverable_groups (test_numeric_grouping.NumericGrouping.test_zero_primitives_have_distinct_recoverable_groups)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\tests\test_numeric_grouping.py", line 55, in test_zero_primitives_have_distinct_recoverable_groups
+    restored, _ = Engine.restore(contract, raw)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "D:\coding 总览\GitHub水王\work\ten-projects\streamcontract\.venv-clean\Lib\site-packages\streamcontract\engine.py", line 324, in restore
+    raise CheckpointError("group digest differs from retained numeric grouping witness")
+streamcontract.engine.CheckpointError: group digest differs from retained numeric grouping witness
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.020s
+
+FAILED (errors=19)

@@ -1,0 +1,12 @@
+independent_oracle: 40 streams, 3200 records, 160 resume comparisons; zero mismatches
+test_40_dynamic_watermark_oracles_and_all_selected_resume_cuts (__main__.IndependentTests.test_40_dynamic_watermark_oracles_and_all_selected_resume_cuts) ... ok
+test_all_resource_exceptions_leave_checkpoint_unchanged (__main__.IndependentTests.test_all_resource_exceptions_leave_checkpoint_unchanged) ... ok
+test_cli_prefix_resume_parser_privacy_and_protected_paths (__main__.IndependentTests.test_cli_prefix_resume_parser_privacy_and_protected_paths) ... ok
+test_corrupt_checkpoint_controls_and_sequence (__main__.IndependentTests.test_corrupt_checkpoint_controls_and_sequence) ... ok
+test_exact_deadline_and_half_open_boundary (__main__.IndependentTests.test_exact_deadline_and_half_open_boundary) ... ok
+test_strict_types_immutability_and_privacy (__main__.IndependentTests.test_strict_types_immutability_and_privacy) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.193s
+
+OK
