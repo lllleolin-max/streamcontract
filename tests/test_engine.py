@@ -82,6 +82,22 @@ class EngineTests(unittest.TestCase):
                     {"t": 1, "key": "a"}, {**event(1), "secret": "password"}, [], None]:
             self.assertTrue(c.validate(bad))
 
+    def test_huge_integer_is_invalid_without_float_conversion(self):
+        c = Contract(spec())
+        e = Engine(c)
+        output = e.push(event(1, 10**1000))
+        self.assertEqual(output[0]["status"], "INVALID")
+        self.assertEqual(output[0]["evidence"], [{"code": "numeric_domain", "field": "x"}])
+        self.assertEqual(e.sequence, 1)
+
+    def test_malformed_sdk_contracts_use_contract_error(self):
+        for mutate in [lambda s: s.update(group_by=[{}]), lambda s: s["checks"][0].update(field=[]),
+                       lambda s: s["fields"]["x"].update(min=10**1000)]:
+            s = spec()
+            mutate(s)
+            with self.assertRaises(ContractError):
+                Contract(s)
+
     def test_drift_and_insufficient(self):
         s = spec()
         s["checks"][0]["min_samples"] = 2

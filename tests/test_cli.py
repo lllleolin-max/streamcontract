@@ -48,6 +48,15 @@ class CliTests(unittest.TestCase):
         self.assertEqual(output[-1]["stats"]["invalid"], 3)
         self.assertEqual(error, b"")
 
+    def test_huge_integer_emits_disposition_then_continues(self):
+        self.input.write_text('{"t":1,"key":"a","x":' + '9' * 1000 + '}\n{"t":2,"key":"a","x":0}\n')
+        code, output, error = self.command()
+        self.assertEqual(code, 2)
+        self.assertEqual(error, b"")
+        self.assertEqual(output[-1]["sequence"], 2)
+        self.assertEqual(output[-1]["stats"]["invalid"], 1)
+        self.assertEqual(output[-1]["stats"]["accepted"], 1)
+
     def test_oversized_line_bounded_and_next_line_read(self):
         s = spec()
         s["limits"] = {"max_event_bytes": 40}

@@ -45,7 +45,8 @@ def integer(value: Any, name: str, minimum: int = 0, maximum: int = MAX_TIME) ->
 
 
 def number(value: Any, name: str) -> int | float:
-    if type(value) not in (int, float) or not math.isfinite(value) or abs(value) > MAX_NUMBER:
+    if (type(value) not in (int, float) or abs(value) > MAX_NUMBER
+            or (type(value) is float and not math.isfinite(value))):
         raise ContractError(f"{name}: expected finite number with abs <= 1e15")
     return value
 
@@ -72,7 +73,7 @@ class Field:
         if type(value) not in types[self.type]:
             return "type"
         if self.type in ("integer", "number"):
-            if not math.isfinite(value) or abs(value) > MAX_NUMBER:
+            if abs(value) > MAX_NUMBER or (type(value) is float and not math.isfinite(value)):
                 return "numeric_domain"
             if self.minimum is not None and value < self.minimum:
                 return "minimum"
@@ -101,6 +102,14 @@ class Contract:
     """Compile a supported flat JSON contract. Unknown options fail closed."""
 
     def __init__(self, spec: dict):
+        try:
+            self._compile(spec)
+        except (ValueError, TypeError, KeyError, OverflowError, RecursionError, UnicodeError) as exc:
+            if isinstance(exc, ContractError):
+                raise
+            raise ContractError("invalid contract declaration or encoding") from exc
+
+    def _compile(self, spec: dict) -> None:
         spec = deepcopy(spec)
         keys(spec, {"version", "event_time", "fields", "group_by", "window", "limits", "checks"},
              {"version", "event_time", "fields", "window", "checks"}, "contract")
@@ -141,7 +150,8 @@ class Contract:
         if self.event_time not in self.fields or self.fields[self.event_time].type != "integer" or not self.fields[self.event_time].required:
             raise ContractError("event_time must be a required integer field (epoch milliseconds)")
         groups = spec.get("group_by", [])
-        if type(groups) is not list or len(groups) > 8 or len(set(groups)) != len(groups):
+        if (type(groups) is not list or len(groups) > 8 or any(type(g) is not str for g in groups)
+                or len(set(groups)) != len(groups)):
             raise ContractError("group_by: require up to 8 distinct field names")
         if any(g not in self.fields or not self.fields[g].required for g in groups):
             raise ContractError("group_by fields must be declared and required")
@@ -169,7 +179,7 @@ class Contract:
             if check["op"] == "count":
                 if field is not None:
                     raise ContractError("count must not declare field")
-            elif field not in self.fields or self.fields[field].type not in ("integer", "number") or not self.fields[field].required:
+            elif type(field) is not str or field not in self.fields or self.fields[field].type not in ("integer", "number") or not self.fields[field].required:
                 raise ContractError("aggregate field must be required and numeric")
             lo = number(check["min"], "check.min") if "min" in check else None
             hi = number(check["max"], "check.max") if "max" in check else None
