@@ -7,6 +7,7 @@ Build and install the wheel into a clean virtual environment, then run:
 ```sh
 python -m unittest discover -s tests -v
 python examples/workflow.py
+python examples/cli_workflow.py
 python benchmarks/compare.py
 ```
 

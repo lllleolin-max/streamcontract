@@ -1,11 +1,8 @@
 """Executable synthetic contrasts, not measurements of Soda/Flink performance."""
 
-import hashlib
 import json
 import time
 import tracemalloc
-from collections import defaultdict
-from copy import deepcopy
 
 from streamcontract import Contract, Engine, ResourceLimit
 
@@ -50,7 +47,7 @@ def processing_time(events, policy):
 
 
 def metrics(result):
-    return {"failed_windows": result[1]["stats"]["failed"], "late": result[1]["stats"]["late"],
+    return {"status": result[1]["status"], "failed_windows": result[1]["stats"]["failed"], "late": result[1]["stats"]["late"],
             "insufficient": result[1]["stats"]["insufficient"], "accepted": result[1]["stats"]["accepted"]}
 
 
@@ -61,7 +58,8 @@ def main():
         "adverse_too_small_watermark_delay": [e(1), e(21), e(2), e(22)],
         "declared_late_after_close": [e(1), e(2), e(40), e(3, 200)],
         "empty": [],
-        "exact_half_open_boundary": [e(9), e(10), e(8), e(11)]}
+        "exact_half_open_boundary": [e(9), e(10), e(8), e(11)],
+        "invalid_row_cannot_advance_watermark": [e(1), e(1000000, "invalid"), e(2)]}
     reports = []
     for name, events in scenarios.items():
         policy = contract()
@@ -74,6 +72,11 @@ def main():
                         "processing_time": metrics(([], processing_time(events, policy))), "event_time": metrics(complete),
                         "ablation_no_aggregate": metrics(no_drift), "ablation_no_disorder_budget": metrics(zero_delay),
                         "resume_equal": True})
+    main_case = reports[0]
+    assert main_case["event_time"]["failed_windows"] == 1
+    assert main_case["processing_time"]["failed_windows"] == 0
+    assert main_case["batch_shape"]["invalid"] == 0
+    assert main_case["ablation_no_aggregate"]["failed_windows"] == 0
     # High cardinality must STOP, not keep allocating or silently drop keys.
     s = contract().to_dict()
     s["limits"] = {"max_groups_per_window": 16}

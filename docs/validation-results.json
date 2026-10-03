@@ -1,0 +1,418 @@
+{
+  "verified_date": "2026-10-03",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.3",
+    "module": ".venv-clean/Lib/site-packages/streamcontract/__init__.py",
+    "license_expression": "MIT",
+    "editable": false
+  },
+  "implementation_commit": "75ce3960585a2086fe32355f87f82a8a8530659a",
+  "source_sha256": {
+    "src/streamcontract/__init__.py": "d86ead05118606d86d6b0332f38d3fd1bd8588feff30c24fa1801ea65a80d668",
+    "src/streamcontract/cli.py": "16e943c2f12a1619af18348eba3291128b732fe89f63b304750ceafc9fc3b68e",
+    "src/streamcontract/contract.py": "a7eaf45aa5f7044b2fb44258f0dbc3712684ff04718d4561c7f04da62f59c3fb",
+    "src/streamcontract/engine.py": "81e35c9c924ff8d90192626e8c5cb14a0cf19f5ffc044e3926e0aee3c86d7ffd"
+  },
+  "commands": {
+    "tests": {
+      "arguments": [
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "exit": 0
+    },
+    "sdk": {
+      "arguments": [
+        "examples/workflow.py"
+      ],
+      "exit": 0
+    },
+    "cli_workflow": {
+      "arguments": [
+        "examples/cli_workflow.py"
+      ],
+      "exit": 0
+    },
+    "benchmark": {
+      "arguments": [
+        "benchmarks/compare.py"
+      ],
+      "exit": 0
+    },
+    "outside_checkout_import": {
+      "arguments": [
+        "-c",
+        "import streamcontract,importlib.metadata,json; print(json.dumps({'module':streamcontract.__file__,'license':importlib.metadata.metadata('streamcontract').get('License-Expression')}))"
+      ],
+      "exit": 0
+    },
+    "entrypoint": {
+      "arguments": [
+        "streamcontract",
+        "--contract",
+        "examples/contract.json",
+        "--input",
+        "examples/events.jsonl"
+      ],
+      "exit": 2
+    }
+  },
+  "test_summary": [
+    "----------------------------------------------------------------------",
+    "Ran 34 tests in 2.994s",
+    "",
+    "OK"
+  ],
+  "sdk": {
+    "resumed_equal": true,
+    "checkpoint_bytes": 752,
+    "summary": {
+      "kind": "summary",
+      "status": "ISSUES",
+      "action": "quarantine",
+      "sequence": 11,
+      "contract_sha256": "dcfd6dc8ea629c75147dd6ba4187d920009aa860563cb7921c4adb91537ccc20",
+      "watermark_ms": 2300,
+      "stats": {
+        "accepted": 9,
+        "invalid": 1,
+        "late": 1,
+        "windows": 3,
+        "failed": 1,
+        "insufficient": 0,
+        "finalized_events": 9
+      },
+      "active_windows": 0,
+      "active_groups": 0,
+      "finished": true
+    }
+  },
+  "cli": {
+    "input_records": 11,
+    "full_exit": 2,
+    "pause_exit": 0,
+    "resume_exit": 2,
+    "corrupt_exit": 3,
+    "source_prefix_verified": true,
+    "decisions_equal": true,
+    "summary": {
+      "action": "quarantine",
+      "active_groups": 0,
+      "active_windows": 0,
+      "contract_sha256": "dcfd6dc8ea629c75147dd6ba4187d920009aa860563cb7921c4adb91537ccc20",
+      "finished": true,
+      "kind": "summary",
+      "sequence": 11,
+      "stats": {
+        "accepted": 9,
+        "failed": 1,
+        "finalized_events": 9,
+        "insufficient": 0,
+        "invalid": 1,
+        "late": 1,
+        "windows": 3
+      },
+      "status": "ISSUES",
+      "watermark_ms": 2300
+    }
+  },
+  "benchmark": {
+    "fixture": "disclosed synthetic; no incumbents executed",
+    "scenarios": [
+      {
+        "scenario": "drift_hidden_in_arrival_mix",
+        "records": 6,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "event_time": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "ablation_no_aggregate": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 2,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 5
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "clean_bounded_disorder",
+        "records": 6,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "event_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "ablation_no_aggregate": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 6
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 5
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "adverse_too_small_watermark_delay",
+        "records": 4,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "event_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "ablation_no_aggregate": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "declared_late_after_close",
+        "records": 4,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "event_time": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "ablation_no_aggregate": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "empty",
+        "records": 0,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "EMPTY",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 0
+        },
+        "event_time": {
+          "status": "EMPTY",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 0
+        },
+        "ablation_no_aggregate": {
+          "status": "EMPTY",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 0
+        },
+        "ablation_no_disorder_budget": {
+          "status": "EMPTY",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 0
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "exact_half_open_boundary",
+        "records": 4,
+        "batch_shape": {
+          "invalid": 0,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "event_time": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "ablation_no_aggregate": {
+          "status": "COMPLETE",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 4
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 1,
+          "late": 1,
+          "insufficient": 0,
+          "accepted": 3
+        },
+        "resume_equal": true
+      },
+      {
+        "scenario": "invalid_row_cannot_advance_watermark",
+        "records": 3,
+        "batch_shape": {
+          "invalid": 1,
+          "failed_windows": 0,
+          "late": 0,
+          "scope": "row shape/domain only"
+        },
+        "processing_time": {
+          "status": "ISSUES",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 2
+        },
+        "event_time": {
+          "status": "ISSUES",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 2
+        },
+        "ablation_no_aggregate": {
+          "status": "ISSUES",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 2
+        },
+        "ablation_no_disorder_budget": {
+          "status": "ISSUES",
+          "failed_windows": 0,
+          "late": 0,
+          "insufficient": 0,
+          "accepted": 2
+        },
+        "resume_equal": true
+      }
+    ],
+    "cardinality_limit": {
+      "offered_records": 10000,
+      "consumed": 16,
+      "next_sequence": 17,
+      "active_groups": 16,
+      "python_allocation_peak_bytes": 8595,
+      "seconds": 0.0007987000280991197
+    }
+  },
+  "remote_ci": "not yet published/executed",
+  "python_311_runtime": "not available locally",
+  "independent_scores": "not awarded",
+  "verification_context": "Executed on identical working-tree source immediately before implementation commit; final evidence commit adds CLI example, benchmark assertions, README/CI and this observation.",
+  "demonstration_sha256": {
+    "examples/cli_workflow.py": "e53d829edbd01634ab7e41b7792b9ad54e95f5b6155307006814b7cdf253275b",
+    "benchmarks/compare.py": "205e77a2ce251ec2f2fbebd26c2e6c9ef3ab14ce25e7f937d3516e313ed95f45"
+  }
+}

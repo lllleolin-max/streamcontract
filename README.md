@@ -23,12 +23,13 @@ python -m unittest discover -s tests -v
 ```sh
 streamcontract --contract examples/contract.json --input examples/events.jsonl
 python examples/workflow.py
+python examples/cli_workflow.py
 python benchmarks/compare.py
 ```
 
-The synthetic checkout fixture has 11 records: 9 accepted, 1 late, 1 invalid; three observed windows finalize, including one latency drift. The first CLI exits **2**, meaning data needs investigation/quarantine. `workflow.py` asserts every event/window decision and final summary equal after checkpoint/resume. No customer data or adoption evidence is used.
+The synthetic checkout fixture has 11 records: 9 accepted, 1 late, 1 invalid; three observed windows finalize, including one latency drift. The first CLI exits **2**, meaning data needs investigation/quarantine. `workflow.py` asserts every event/window decision and final summary equal after SDK checkpoint/resume. `cli_workflow.py` runs the actual CLI pause/resume, verifies the source prefix, compares concatenated decisions and rejects a damaged checkpoint. No customer data or adoption evidence is used.
 
-**中文：** 首条命令按 1 秒事件窗口验证模拟 checkout 请求，均值基准为 100 ms、允许绝对偏移 25 ms；它定位一个偏移窗口、一条过迟事件和一条字段类型错误。第二条验证恢复前后结果完全一致；第三条实际运行行级检查、处理时间基线和两种机制消融。
+**中文：** 首条命令按 1 秒事件窗口验证模拟 checkout 请求，均值基准为 100 ms、允许绝对偏移 25 ms；它定位一个偏移窗口、一条过迟事件和一条字段类型错误。两个 workflow 脚本分别验证 SDK 和 CLI 的恢复结果、源文件前缀与损坏检查点拒绝；compare 脚本实际运行行级检查、处理时间基线和两种机制消融。
 
 Pause without declaring EOF, then verify and replay the consumed source prefix:
 

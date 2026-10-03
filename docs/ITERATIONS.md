@@ -95,4 +95,4 @@ Ran 26 tests in 0.033s
 FAILED (failures=2)
 ```
 
-Correction: compiled attributes reject deletion as well as assignment; restored maximum time must pass the compiled event-time field. Rebuilt wheel/clean install verification runs 34 tests and both SDK/CLI workflows plus seven contrasts. Exact fifth correction SHA and observed final verification are linked in the separate final evidence commit, so no commit attempts to embed its own hash. Plausible forged history and reflection remain outside the unkeyed integrity boundary.
+Correction: compiled attributes reject deletion as well as assignment; restored maximum time must pass the compiled event-time field. After: `75ce3960585a2086fe32355f87f82a8a8530659a`. Rebuilt wheel/clean install verification observed 34 tests in 2.994s, OK; SDK and CLI full/resume equality and seven executed contrasts. [Final validation](VALIDATION.md) and [machine-readable results](validation-results.json) bind those observations to source digests. The report is a separate final evidence commit, so no commit attempts to embed its own hash. Plausible forged history and reflection remain outside the unkeyed integrity boundary.
