@@ -43,7 +43,9 @@ def _json(raw):
         # The new file protocol requires UTF-8, without a BOM (legacy unchanged).
         if raw.startswith(b"\xef\xbb\xbf"):
             _error("local JSON BOM is forbidden")
-        return strict_json(raw.decode("utf-8"))
+        value = strict_json(raw.decode("utf-8"))
+        canonical(value)  # rejects overflow-to-infinity and lone surrogates too
+        return value
     except (UnicodeError, ValueError, OverflowError, RecursionError) as exc:
         if isinstance(exc, CheckpointError):
             raise
@@ -66,6 +68,8 @@ def _read(root, name, cap):
 
 
 def _identity(root, contract):
+    if root.is_symlink() or not root.is_dir():
+        _error("local output directory must be a regular directory")
     identity = _json(_read(root, "IDENTITY.json", META_LIMIT))
     if (type(identity) is not dict or set(identity) != {"version", "store_id", "contract_sha256"}
             or type(identity["version"]) is not int or identity["version"] != 1
@@ -165,7 +169,7 @@ def _chain(root, contract, store):
                 or not _hash(manifest["checkpoint_sha256"]) or not _hash(manifest["output_sha256"])
                 or not _int(manifest["checkpoint_bytes"], 1) or not _int(manifest["output_bytes"])
                 or not _int(manifest["output_count"]) or not _int(manifest["total_outputs"])
-                or manifest["phase"] not in {"paused", "finished", "resource_stop"}
+                or type(manifest["phase"]) is not str or manifest["phase"] not in {"paused", "finished", "resource_stop"}
                 or type(manifest["exit_code"]) is not int or manifest["exit_code"] not in {0, 2, 3}
                 or type(manifest["summary"]) is not dict):
             _error("invalid local manifest schema")
@@ -176,6 +180,7 @@ def _chain(root, contract, store):
         checkpoint = _read(root, name + ".checkpoint.json", contract.limits["max_checkpoint_bytes"])
         if len(checkpoint) != manifest["checkpoint_bytes"] or hashlib.sha256(checkpoint).hexdigest() != manifest["checkpoint_sha256"]:
             _error("local checkpoint digest mismatch")
+        _binding(checkpoint, manifest, contract)
         chain.append((name, manifest, reference, checkpoint if not chain else None))
         reference = manifest["parent"]
     chain.reverse()
@@ -197,6 +202,40 @@ def _chain(root, contract, store):
     return chain, engine, source
 
 
+def _binding(raw, manifest, contract):
+    """Bind every historic snapshot's envelope/source/summary; restore latest fully."""
+    document = _json(raw)
+    if type(document) is not dict or set(document) != {"payload", "sha256"}:
+        _error("invalid local checkpoint envelope")
+    payload = document["payload"]
+    expected = {"version", "contract_sha256", "sequence", "max_event_time", "watermark",
+                "stats", "finished", "windows", "source"}
+    if (type(payload) is not dict or set(payload) != expected or type(payload["version"]) is not int
+            or payload["version"] != 3 or payload["contract_sha256"] != contract.digest
+            or document["sha256"] != hashlib.sha256(canonical(payload)).hexdigest()
+            or not _int(payload["sequence"]) or type(payload["finished"]) is not bool
+            or canonical(payload["source"]) != canonical(manifest["source"])
+            or payload["sequence"] != manifest["source"]["lines"]
+            or type(payload["stats"]) is not dict or set(payload["stats"]) != set(Engine(contract).stats)
+            or any(not _int(v) for v in payload["stats"].values())
+            or type(payload["windows"]) is not list
+            or any(type(w) is not dict or type(w.get("groups")) is not list for w in payload["windows"])
+            or (payload["watermark"] is not None and type(payload["watermark"]) is not int)):
+        _error("local checkpoint metadata mismatch")
+    stats = payload["stats"]
+    issues = stats["invalid"] + stats["late"] + stats["failed"] + stats["insufficient"]
+    status = "EMPTY" if payload["sequence"] == 0 else "ISSUES" if issues else "COMPLETE" if payload["finished"] else "PAUSED"
+    summary = {"kind": "summary", "status": status,
+               "action": "investigate" if status == "EMPTY" else "quarantine" if issues else "release" if payload["finished"] else "resume",
+               "sequence": payload["sequence"], "contract_sha256": contract.digest, "watermark_ms": payload["watermark"],
+               "stats": stats, "active_windows": len(payload["windows"]),
+               "active_groups": sum(len(w["groups"]) for w in payload["windows"]), "finished": payload["finished"]}
+    if (canonical(summary) != canonical(manifest["summary"])
+            or payload["finished"] != (manifest["phase"] == "finished")
+            or manifest["exit_code"] != (3 if manifest["phase"] == "resource_stop" else 2 if status in {"EMPTY", "ISSUES"} else 0)):
+        _error("local summary metadata mismatch")
+
+
 def _output_id(store, index, decision):
     return hashlib.sha256(canonical([store, index, decision])).hexdigest()
 
@@ -205,7 +244,7 @@ def _rows(root, chain, store):
     index = sequence = 0
     for name, manifest, _, _ in chain:
         digest, size, count = hashlib.sha256(), 0, 0
-        terminal = False
+        terminal = stopped = False
         with _file(root, name + ".outputs.jsonl").open("rb") as file:
             while raw := file.readline(RECORD_LIMIT + 1):
                 if len(raw) > RECORD_LIMIT or not raw.endswith(b"\n"):
@@ -221,18 +260,20 @@ def _rows(root, chain, store):
                 decision = row["decision"]
                 kind = decision.get("kind")
                 if kind == "event":
-                    if type(decision.get("sequence")) is not int or decision["sequence"] != sequence + 1:
+                    if stopped or type(decision.get("sequence")) is not int or decision["sequence"] != sequence + 1:
                         _error("local event sequence mismatch")
                     sequence += 1
                 elif kind == "window":
-                    if type(decision.get("sequence")) is not int or decision["sequence"] != sequence:
+                    if stopped or type(decision.get("sequence")) is not int or decision["sequence"] != sequence:
                         _error("local window sequence mismatch")
                 elif kind == "error":
-                    if (manifest["phase"] != "resource_stop" or decision.get("consumed") is not False
+                    if (stopped or manifest["phase"] != "resource_stop" or decision.get("consumed") is not False
                             or type(decision.get("next_sequence")) is not int or decision["next_sequence"] != sequence + 1):
                         _error("invalid local stop decision")
+                    stopped = True
                 elif kind == "summary":
-                    if manifest["phase"] == "paused" or canonical(decision) != canonical(manifest["summary"]):
+                    if (manifest["phase"] == "paused" or stopped != (manifest["phase"] == "resource_stop")
+                            or canonical(decision) != canonical(manifest["summary"])):
                         _error("invalid local terminal summary")
                     terminal = True
                 else:
@@ -377,6 +418,8 @@ def process_local(contract: Contract, input_path, directory, *, stop_after=None,
             with Path(input_path).open("rb") as file:
                 iterator, digest = _prefix(file, contract, source)
                 if chain and chain[-1][1]["phase"] != "paused":
+                    return _receipt(store, chain[-1][1])
+                if stop_after == 0 and chain:
                     return _receipt(store, chain[-1][1])
                 stage = _Stage(root, store, generation, index)
                 consumed = batch = 0

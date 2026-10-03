@@ -151,6 +151,9 @@ class LocalTests(unittest.TestCase):
                     while not marker.exists() and child.poll() is None and time.monotonic() < deadline:
                         time.sleep(.02)
                     self.assertTrue(marker.exists(), child.communicate(timeout=2) if child.poll() is not None else 'marker timeout')
+                    if stage == 'stage_record_written':
+                        with self.assertRaises(CheckpointError):
+                            process_local(self.contract, self.source, directory)
                 finally:
                     if child.poll() is None:
                         child.terminate()
@@ -212,6 +215,78 @@ class LocalTests(unittest.TestCase):
             process_local(self.contract, self.source, directory, commit_every=1)
         self.assertEqual((directory / 'CURRENT.json').read_bytes(), pointer)
         self.assertEqual(self.rows(directory), [])
+
+    def test_rebound_schema_and_output_parser_fail_closed(self):
+        import shutil
+        baseline = self.root / 'template'
+        process_local(self.contract, self.source, baseline)
+
+        def rebound(directory, raw=None, mutate=None):
+            pointer_path = directory / 'CURRENT.json'
+            pointer = json.loads(pointer_path.read_bytes())
+            name = pointer['commit']['name']
+            manifest_path = directory / (name + '.manifest.json')
+            manifest = json.loads(manifest_path.read_bytes())
+            if raw is not None:
+                (directory / (name + '.outputs.jsonl')).write_bytes(raw)
+                manifest['output_bytes'] = len(raw)
+                manifest['output_sha256'] = hashlib.sha256(raw).hexdigest()
+            if mutate is not None:
+                mutate(manifest)
+            encoded = canonical(manifest)
+            manifest_path.write_bytes(encoded)
+            pointer['commit']['sha256'] = hashlib.sha256(encoded).hexdigest()
+            pointer_path.write_bytes(canonical(pointer))
+
+        mutations = [lambda m: m.update(phase=[]), lambda m: m.update(generation=True),
+                     lambda m: m.update(output_count=1.0), lambda m: m.update(exit_code=False),
+                     lambda m: m['source'].update(lines=True), lambda m: m['source'].update(prefix_sha256='0'*64),
+                     lambda m: m['summary'].update(sequence=True), lambda m: m.update(store_id='0'*32)]
+        for index, mutate in enumerate(mutations):
+            directory = self.root / f'rebound-{index}'
+            shutil.copytree(baseline, directory)
+            rebound(directory, mutate=mutate)
+            with self.assertRaises(CheckpointError):
+                next(read_committed(directory, self.contract))
+        bad_lines = [b'\xef\xbb\xbf{}\n', b'\xff\n', b'{"version":1,"version":1}\n',
+                     b'{"value":NaN}\n', b'{"value":Infinity}\n', b'{"value":1e999}\n',
+                     b'{"value":"\\ud800"}\n', b'{}', b'x' * 262145 + b'\n']
+        pointer = json.loads((baseline / 'CURRENT.json').read_bytes())
+        original = (baseline / (pointer['commit']['name'] + '.outputs.jsonl')).read_bytes()
+        lines = original.splitlines(keepends=True)
+        bad_lines += [lines[1] + lines[0] + b''.join(lines[2:]), lines[0] + original, b''.join(lines[:-1])]
+        for index, raw in enumerate(bad_lines):
+            directory = self.root / f'parser-{index}'
+            shutil.copytree(baseline, directory)
+            rebound(directory, raw=raw)
+            with self.assertRaises(CheckpointError):
+                next(read_committed(directory, self.contract))
+
+    def test_noop_pause_preserves_files_and_earlier_metadata_binding(self):
+        directory = self.root / 'no-op'
+        process_local(self.contract, self.source, directory, stop_after=1)
+        names = sorted(p.name for p in directory.iterdir())
+        for _ in range(3):
+            process_local(self.contract, self.source, directory, stop_after=0)
+        self.assertEqual(sorted(p.name for p in directory.iterdir()), names)
+        process_local(self.contract, self.source, directory)
+        # Rehashing an ancestor summary alone cannot detach it from its snapshot.
+        pointer_path = directory / 'CURRENT.json'
+        pointer = json.loads(pointer_path.read_bytes())
+        latest_path = directory / (pointer['commit']['name'] + '.manifest.json')
+        latest = json.loads(latest_path.read_bytes())
+        parent_path = directory / (latest['parent']['name'] + '.manifest.json')
+        parent = json.loads(parent_path.read_bytes())
+        parent['summary']['sequence'] = 0
+        encoded = canonical(parent)
+        parent_path.write_bytes(encoded)
+        latest['parent']['sha256'] = hashlib.sha256(encoded).hexdigest()
+        encoded = canonical(latest)
+        latest_path.write_bytes(encoded)
+        pointer['commit']['sha256'] = hashlib.sha256(encoded).hexdigest()
+        pointer_path.write_bytes(canonical(pointer))
+        with self.assertRaises(CheckpointError):
+            next(read_committed(directory, self.contract))
 
 
 if __name__ == '__main__':
