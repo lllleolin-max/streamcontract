@@ -218,7 +218,8 @@ class Contract:
 
     @classmethod
     def from_file(cls, path: str | Path) -> "Contract":
-        raw = Path(path).read_bytes()
+        with Path(path).open("rb") as file:
+            raw = file.read(1048577)
         if len(raw) > 1048576:
             raise ContractError("contract exceeds 1 MiB")
         try:

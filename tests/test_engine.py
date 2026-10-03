@@ -120,6 +120,18 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(c.size_ms, 10)
         self.assertEqual(c.to_dict()["window"]["size_ms"], 10)
 
+    def test_checkpoint_rejects_payload_like_source_metadata(self):
+        e = Engine(Contract(spec()))
+        e.push(event(1))
+        for source in [{"raw_payload": "SECRET"}, {"lines": True, "prefix_sha256": "a" * 64},
+                       {"lines": 0, "prefix_sha256": "a" * 64}, {"lines": 1, "prefix_sha256": "invalid"}]:
+            with self.assertRaises(CheckpointError):
+                e.checkpoint(source)
+        source = {"lines": 1, "prefix_sha256": "a" * 64}
+        restored, position = Engine.restore(e.contract, e.checkpoint(source))
+        self.assertEqual(position, source)
+        self.assertEqual(restored.summary(), e.summary())
+
     def test_drift_and_insufficient(self):
         s = spec()
         s["checks"][0]["min_samples"] = 2

@@ -59,6 +59,23 @@ Ran 24 tests in 0.017s
 FAILED (failures=1, errors=1)
 ```
 
-The first failure is the pre-existing identity defect; the export test is the new supported path for intentionally revising configuration. Correction: slot-based immutable compiled attributes, read-only mapping proxies, immutable rule/field records and encoded immutable declaration; `to_dict()` yields a detached copy. Benchmark ablation now uses the public export API. Verification: rebuild/force-reinstall, all 30 tests, SDK workflow and six executable contrasts; observed all tests OK, full/resume equality and one drift failure versus zero in shape/arrival-time/no-aggregate baselines. After: recorded by the Round 3 code commit (full SHA added in the final evidence commit).
+The first failure is the pre-existing identity defect; the export test is the new supported path for intentionally revising configuration. Correction: slot-based immutable compiled attributes, read-only mapping proxies, immutable rule/field records and encoded immutable declaration; `to_dict()` yields a detached copy. Benchmark ablation now uses the public export API. Verification: rebuild/force-reinstall, all 30 tests, SDK workflow and six executable contrasts; observed all tests OK, full/resume equality and one drift failure versus zero in shape/arrival-time/no-aggregate baselines. After: `68bcb72719437b822db29454728eaed0ec637992`.
 
 Remaining boundary: hostile code in the same Python process can use reflection to bypass ordinary object immutability. No in-process security sandbox is claimed.
+
+## Additional round 4 — checkpoint write boundaries
+
+Before: `68bcb72719437b822db29454728eaed0ec637992`. Final operational review found SDK checkpoint source metadata was validated only on restore, so an arbitrary raw-payload-like dictionary could be persisted (and then fail to restore). CLI also attempted checkpoint writes onto its input/contract without detecting aliases. On this Windows machine the open input replacement was blocked by the OS only after event output; on POSIX replacing an open pathname need not fail. The tool should reject configuration before any input processing.
+
+Actual failing probe command: `.venv\Scripts\python.exe -m unittest discover -s tests -v` with the new metadata/path tests against the Round 3 wheel:
+
+```text
+ERROR: test_checkpoint_cannot_overwrite_input_or_contract
+KeyError: 'code'  # first output was already an event, not the requested preflight rejection
+FAIL: test_checkpoint_rejects_payload_like_source_metadata
+AssertionError: CheckpointError not raised
+Ran 32 tests in 2.286s
+FAILED (failures=1, errors=1)
+```
+
+Correction: source metadata shape/sequence/digest checked before encoding or writing; CLI rejects resolved or hardlink checkpoint aliases of input/contract before opening input; contract file reads are also limited to 1 MiB + 1 byte. Verification rebuild/force reinstall and full suite: 33 tests OK, including hardlink alias/source byte preservation. After: recorded by the fourth code commit and linked in the final evidence entry. Remaining boundary: hostile concurrent path replacement is not an OS sandbox; append-only source and trusted checkpoint directory are required.

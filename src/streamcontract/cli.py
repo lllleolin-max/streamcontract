@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
 import sys
 from pathlib import Path
 
@@ -35,6 +36,11 @@ def emit(value: dict) -> None:
 
 
 def run(args) -> int:
+    if args.checkpoint:
+        destination = Path(args.checkpoint).resolve()
+        for protected in (Path(args.input).resolve(), Path(args.contract).resolve()):
+            if destination == protected or (destination.exists() and protected.exists() and os.path.samefile(destination, protected)):
+                raise CheckpointError("checkpoint aliases input or contract")
     contract = Contract.from_file(args.contract)
     engine, source = Engine(contract), None
     if args.resume:
@@ -44,7 +50,6 @@ def run(args) -> int:
         if source is None or engine.finished:
             raise CheckpointError("CLI requires unfinished checkpoint with source position")
     digest = hashlib.sha256()
-    skipped = 0
     with Path(args.input).open("rb") as file:
         iterator = iter(records(file, contract.limits["max_event_bytes"]))
         if source:
@@ -53,7 +58,6 @@ def run(args) -> int:
                     _, digest = next(iterator)
                 except StopIteration as exc:
                     raise CheckpointError("source shorter than checkpoint prefix") from exc
-                skipped += 1
             if digest.hexdigest() != source["prefix_sha256"]:
                 raise CheckpointError("source prefix mismatch")
         consumed = 0

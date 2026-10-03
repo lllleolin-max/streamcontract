@@ -72,6 +72,17 @@ def read_rational(value: Any) -> Fraction:
     return result
 
 
+def validate_source(source: Any, sequence: int) -> None:
+    if source is None:
+        return
+    if (type(source) is not dict or set(source) != {"lines", "prefix_sha256"}
+            or type(source["lines"]) is not int or source["lines"] != sequence):
+        raise CheckpointError("invalid source position")
+    if (type(source["prefix_sha256"]) is not str or len(source["prefix_sha256"]) != 64
+            or any(c not in "0123456789abcdef" for c in source["prefix_sha256"])):
+        raise CheckpointError("invalid source digest")
+
+
 class Engine:
     """Single ordered input lane; caller owns partition merge and downstream delivery.
 
@@ -215,6 +226,7 @@ class Engine:
                 "active_groups": sum(len(g) for g in self.windows.values()), "finished": self.finished}
 
     def checkpoint(self, source: dict | None = None) -> bytes:
+        validate_source(source, self.sequence)
         windows = []
         for start, groups in sorted(self.windows.items()):
             windows.append({"start_ms": start, "groups": [
@@ -316,11 +328,7 @@ class Engine:
             if not payload["finished"] and maximum is not None and maximum // contract.size_ms * contract.size_ms not in engine.windows:
                 raise CheckpointError("maximum event window missing")
             source = payload["source"]
-            if source is not None:
-                if type(source) is not dict or set(source) != {"lines", "prefix_sha256"} or type(source["lines"]) is not int or source["lines"] != seq:
-                    raise CheckpointError("invalid source position")
-                if type(source["prefix_sha256"]) is not str or len(source["prefix_sha256"]) != 64 or any(c not in "0123456789abcdef" for c in source["prefix_sha256"]):
-                    raise CheckpointError("invalid source digest")
+            validate_source(source, seq)
             engine.sequence, engine.max_event_time, engine.watermark = seq, maximum, watermark
             engine.stats, engine.finished = stats, payload["finished"]
             return engine, source

@@ -1,5 +1,6 @@
 import hashlib
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -78,6 +79,26 @@ class CliTests(unittest.TestCase):
         state = json.loads(self.checkpoint.read_bytes())["payload"]
         self.assertEqual(state["source"], {"lines": 1, "prefix_sha256": hashlib.sha256(prefix).hexdigest()})
         self.assertFalse(output[-2]["consumed"])
+
+    def test_checkpoint_cannot_overwrite_input_or_contract(self):
+        self.input.write_bytes(b'{"t":1,"key":"a","x":0}\n')
+        for path in [self.input, self.contract]:
+            original = path.read_bytes()
+            code, output, error = self.command("--checkpoint", str(path))
+            self.assertEqual(code, 3)
+            self.assertEqual(path.read_bytes(), original)
+            self.assertEqual(output[0]["code"], "checkpoint aliases input or contract")
+            self.assertEqual(error, b"")
+
+    def test_checkpoint_hardlink_alias_rejects(self):
+        self.input.write_bytes(b'{"t":1,"key":"a","x":0}\n')
+        alias = self.root / "aliased-state.json"
+        os.link(self.input, alias)
+        original = self.input.read_bytes()
+        code, output, _ = self.command("--checkpoint", str(alias))
+        self.assertEqual(code, 3)
+        self.assertEqual(output[0]["code"], "checkpoint aliases input or contract")
+        self.assertEqual(self.input.read_bytes(), original)
 
 
 if __name__ == "__main__":
