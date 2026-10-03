@@ -6,22 +6,46 @@ Validate JSONL ingestion contracts in bounded **event-time** windows and resume 
 
 ## Install / 安装
 
-From a cloned checkout (no PyPI release is claimed):
+Install from a source checkout with Python 3.11+:
 
 ```sh
-python -m venv .venv
-# Linux/macOS: source .venv/bin/activate
-# Windows PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install build
-python -m build --wheel
-python -m pip install dist/streamcontract-0.2.1-py3-none-any.whl
-python -m unittest discover -s tests -v
+git clone https://github.com/lllleolin-max/streamcontract.git
+cd streamcontract
 ```
+
+Linux/macOS:
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install .
+.venv/bin/python -m streamcontract.cli --contract examples/contract.json --input examples/events.jsonl
+```
+
+Windows PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.venv\Scripts\python.exe -m pip install .
+.venv\Scripts\python.exe -m streamcontract.cli --contract examples/contract.json --input examples/events.jsonl
+```
+
+In the remaining examples, `python` means this environment's interpreter:
+`.venv/bin/python` on Linux/macOS or `.venv\Scripts\python.exe` on Windows.
+The runtime uses the standard library; source installation may download build
+dependencies. No PyPI release is required for these instructions.
+
+The first CLI run emits JSONL and intentionally exits **`2`**, because the fixture
+contains data issues; installation itself should succeed. `pip install .` builds
+and installs the package without requiring a separate `build` command or a
+version-specific wheel filename. To keep a distributable wheel, optionally run
+`python -m pip install build` followed by `python -m build --wheel`; the result is
+written to `dist/`. [Development instructions](CONTRIBUTING.md) cover validation
+of the installed wheel and the optional test suite.
 
 ## Useful first run / 可运行示例
 
 ```sh
-streamcontract --contract examples/contract.json --input examples/events.jsonl
+python -m streamcontract.cli --contract examples/contract.json --input examples/events.jsonl
 python examples/workflow.py
 python examples/cli_workflow.py
 python benchmarks/compare.py
@@ -34,11 +58,20 @@ The synthetic checkout fixture has 11 records: 9 accepted, 1 late, 1 invalid; th
 Pause without declaring EOF, then verify and replay the consumed source prefix:
 
 ```sh
-streamcontract --contract examples/contract.json --input examples/events.jsonl --stop-after 4 --checkpoint state.json
-streamcontract --contract examples/contract.json --input examples/events.jsonl --resume state.json
+python -m streamcontract.cli --contract examples/contract.json --input examples/events.jsonl --stop-after 4 --checkpoint state.json
+python -m streamcontract.cli --contract examples/contract.json --input examples/events.jsonl --resume state.json
 ```
 
-The second command still exits 2 for the fixture's real issues. `--stop-after` counts **new records**, not total source lines. Save stdout from each segment and exclude each intermediate `summary` to compare the concatenated decision stream. A completed checkpoint cannot resume; use a pause for a growing file. Resume reads and hashes the consumed prefix, so changing a prior byte fails even when the filename stays the same.
+The installed `streamcontract` command is equivalent to the module form above.
+Input is a contract JSON file and a JSONL event file; stdout contains event/window
+decisions followed by a summary. Checkpoints go only to the explicit destination.
+The first pause exits `0`; the second command exits `2` for the fixture's real issues.
+`state.json` is an explicit checkpoint output and may be replaced on another pause.
+`--stop-after` counts **new records**, not total source lines. Save stdout from each
+segment and exclude each intermediate `summary` to compare the concatenated
+decision stream. A completed checkpoint cannot resume; use a pause for a growing
+file. Resume reads and hashes the consumed prefix, so changing a prior byte fails
+even when the filename stays the same.
 
 ## SDK
 
