@@ -13,3 +13,11 @@ Recovery guarantee: for the same parsed input order, same contract and valid bou
 Persistence boundaries: `save` writes in the destination directory, flushes/fsyncs the temporary file and atomically replaces. Directory fsync/power-loss guarantees vary by OS/filesystem and are not claimed. Decision stdout and checkpoint replacement are **not one transaction**: a crash after output but before save may replay decisions, and after save but before output consumption may leave a sink behind. Use sequence plus window/group/contract IDs as downstream idempotency keys and transact your own sink/cursor. No Kafka multi-partition checkpoint coordination, sink acknowledgment, exactly-once delivery, encryption or hostile-actor authentication is provided. SDK calls are not thread-safe; one engine per ordered lane.
 
 Watermarks are a declared disorder assumption, not an observed truth. A far-future accepted timestamp closes older windows; later old records are quarantined. Invalid records cannot do that, but valid incorrect timestamps can. Choose producer clock bounds upstream. No expected-group list exists, so a group that never sends data and entirely empty time intervals remain unobserved. There are no time-based idle triggers; stalled input requires explicit EOF or upstream lifecycle decisions.
+
+Version 0.3.0 adds an opt-in local output/checkpoint commit protocol alongside the
+original stdout mode described above. Immutable output/state generations become
+visible through one atomic CURRENT pointer. Readers verify the complete captured
+chain before streaming, and recovery verifies its source prefix and fully restores
+the latest original v3 state. This closes the local publication/recovery workflow
+while leaving external cursor transactions and hardware durability to the caller.
+See [local protocol, precise bounds and retention](LOCAL_COMMITS.md).

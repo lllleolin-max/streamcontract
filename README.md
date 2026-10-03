@@ -73,6 +73,30 @@ decision stream. A completed checkpoint cannot resume; use a pause for a growing
 file. Resume reads and hashes the consumed prefix, so changing a prior byte fails
 even when the filename stays the same.
 
+## Recoverable local output / 本地可恢复提交
+
+For output and checkpoint visibility at one local boundary, opt in to a new
+single-writer directory. Reopening it verifies and resumes its committed prefix:
+
+```sh
+streamcontract --contract examples/contract.json --input examples/events.jsonl --local-output run-output/local --stop-after 4 --commit-every 2
+streamcontract --contract examples/contract.json --input examples/events.jsonl --local-output run-output/local --commit-every 2
+python examples/read_local.py --contract examples/contract.json --input examples/events.jsonl --local-output run-output/local
+python examples/local_workflow.py
+```
+
+The pause exits 0, completion exits 2 for the fixture's real issues, and the
+consumer exits 0 after reading a verified snapshot. Producer stdout is a commit
+receipt; the separate consumer emits complete decision envelopes using binary
+UTF-8 JSONL. It follows the commit manifest rather than stage files. Stable
+bundle-wide IDs distinguish several windows and EOF reports at one event
+sequence. `read_committed(..., after_index=cursor)` supports a consumer cursor;
+transact that cursor with your own side effects. This provides local commit
+visibility, with explicit single-writer, source-file trust, disk retention and
+power-loss limits. See [the protocol and SDK](docs/LOCAL_COMMITS.md).
+
+**中文：** 新模式将完整输出与 v3 检查点关联后，以提交指针一次公布；重启只读已提交代，并核验输入前缀。暂停进度在 receipt 中，EOF 终结报告只发布一次。原 stdout 模式继续可用。输出不含原始事件；本地目录需要访问控制与磁盘保留策略，外部消费者仍负责自己的游标事务。
+
 ## SDK
 
 ```python
@@ -107,4 +131,4 @@ Empty streams emit `EMPTY/investigate`; absent groups/windows are not synthesize
 
 ## Evidence status
 
-Tests and executable examples are the acceptance surface. [Iteration history](docs/ITERATIONS.md) preserves the five original real repairs and the subsequent independent checkpoint-domain and signed-zero recovery rejection/repairs. The frozen 0.1.0 artifact received independent scores 83/65/83 and FAIL because restore accepted impossible states. The 0.2.0 artifact received 84/65/84 and FAIL for genuine signed-zero group recovery. This repaired 0.2.1 artifact awaits re-review and does not inherit a passing score. Checked-in GitHub Actions covers Ubuntu/Windows and Python 3.11/3.14; remote execution is unknown until publication. Commercial willingness to pay, users and revenue are unknown.
+Tests and executable examples are the acceptance surface. [Iteration history](docs/ITERATIONS.md) preserves the original repairs; [the 0.3.0 update log](docs/UPDATE_20261003.md) records the local commit implementation and its new checks. The frozen 0.1.0 artifact received independent scores 83/65/83 and FAIL because restore accepted impossible states. The 0.2.0 artifact received 84/65/84 and FAIL for genuine signed-zero group recovery. The 0.2.1 review's 85/89/85 is historical evidence for that artifact; 0.3.0 requires a fresh independent review and inherits no score. Checked-in GitHub Actions covers Ubuntu/Windows and Python 3.11/3.14; new remote execution is unknown until publication. Commercial willingness to pay, users and revenue are unknown.

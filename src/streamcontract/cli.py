@@ -36,7 +36,7 @@ def emit(value: dict) -> None:
 
 
 def run(args) -> int:
-    if args.local_output:
+    if args.local_output is not None:
         from .local import process_local
         root = Path(args.local_output).resolve()
         for protected in (Path(args.input).resolve(), Path(args.contract).resolve()):
@@ -119,7 +119,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.stop_after is not None and args.stop_after < 0:
         parser.error("--stop-after must be nonnegative")
-    if args.local_output and (args.checkpoint or args.resume):
+    if args.local_output is not None and (args.checkpoint or args.resume):
         parser.error("--local-output contains its own checkpoint; do not combine --checkpoint/--resume")
     if not 1 <= args.commit_every <= 1000000:
         parser.error("--commit-every must be in 1..1000000")

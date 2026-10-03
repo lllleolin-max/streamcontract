@@ -8,4 +8,20 @@ Wire v3 proves retained numeric aggregate realizability using enum frequencies a
 
 Bounded raw reading, field/contract limits, numeric domain checks and active-state caps reduce memory hazards. Very large configured caps still consume substantial memory. No OS sandbox, encrypted checkpoint or isolation from a compromised Python process is supplied. Do not execute untrusted plugin code; no plugin/SQL execution is needed here.
 
+The opt-in local commit directory contains sensitive aggregate evidence and all
+historical checkpoint/output generations. Its public unkeyed hashes and stable
+row IDs are integrity/binding aids, not authorization or anonymity. Protect the
+directory and source from hostile writers; committed files must remain immutable
+while a reader validates then streams its captured snapshot. One cooperating
+writer holds an OS lock; this does not stop a hostile process bypassing it.
+Consumers follow CURRENT and manifests, never uncommitted stage files. No raw
+payload/path is added to the protocol. Invalid/oversized input retains the same
+quarantine behavior as the original CLI. Finite record/metadata limits and v3
+state validation remain enforced, but history has O(generations) reader metadata
+and retained disk cost. Reserve space and manage whole-bundle retention; no
+automatic pruning or quota is provided. Atomic commit visibility does not prove
+power-loss durability, and no broker/database/external consumer transaction is
+supplied. The source is not locked/snapshotted; its verified prefix is trusted
+after the check. See [local protocol details](docs/LOCAL_COMMITS.md).
+
 Report a suspected issue privately to the repository maintainer using GitHub's private vulnerability reporting if enabled; otherwise request a private contact without posting payloads or secrets. Include version, a small synthetic reproducer, expected action and observed output. Availability of a hosted reporting channel is unknown until the repository is published.

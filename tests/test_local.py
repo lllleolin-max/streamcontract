@@ -288,6 +288,15 @@ class LocalTests(unittest.TestCase):
         with self.assertRaises(CheckpointError):
             next(read_committed(directory, self.contract))
 
+    def test_exact_batch_pause_avoids_redundant_snapshot(self):
+        directory = self.root / 'exact-batch'
+        receipt = process_local(self.contract, self.source, directory, stop_after=1, commit_every=1)
+        self.assertEqual(receipt['generation'], 1)
+        self.assertEqual(len(list(directory.glob('*.manifest.json'))), 1)
+        self.assertEqual(len(list(directory.glob('*.outputs.jsonl'))), 1)
+        process_local(self.contract, self.source, directory, commit_every=1)
+        self.assertEqual([r['decision'] for r in self.rows(directory)], oracle(self.contract, self.source))
+
 
 if __name__ == '__main__':
     unittest.main()

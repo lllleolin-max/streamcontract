@@ -421,7 +421,6 @@ def process_local(contract: Contract, input_path, directory, *, stop_after=None,
                     return _receipt(store, chain[-1][1])
                 if stop_after == 0 and chain:
                     return _receipt(store, chain[-1][1])
-                stage = _Stage(root, store, generation, index)
                 consumed = batch = 0
                 for raw, next_digest in iterator:
                     if stop_after is not None and consumed >= stop_after:
@@ -439,12 +438,16 @@ def process_local(contract: Contract, input_path, directory, *, stop_after=None,
                             else:
                                 decisions = engine.push(event)
                     except ResourceLimit as exc:
+                        if stage is None:
+                            stage = _Stage(root, store, generation, index)
                         stage.append({"kind": "error", "status": "RESOURCE_LIMIT", "action": "stop",
                                       "limit": exc.limit, "next_sequence": exc.sequence, "consumed": False})
                         stage.append(engine.summary())
                         _, manifest = stage.commit(engine, {"lines": engine.sequence, "prefix_sha256": digest.hexdigest()},
                                                    parent, "resource_stop")
                         return _receipt(store, manifest)
+                    if stage is None:
+                        stage = _Stage(root, store, generation, index)
                     for decision in decisions:
                         stage.append(decision)
                     digest = next_digest
@@ -453,14 +456,19 @@ def process_local(contract: Contract, input_path, directory, *, stop_after=None,
                     if batch == commit_every:
                         parent, manifest = stage.commit(engine, {"lines": engine.sequence, "prefix_sha256": digest.hexdigest()}, parent, "paused")
                         generation += 1
-                        stage = _Stage(root, store, generation, stage.index)
+                        index = stage.index
+                        stage = None
                         batch = 0
                 if stop_after is None:
+                    if stage is None:
+                        stage = _Stage(root, store, generation, index)
                     for decision in engine.finish():
                         stage.append(decision)
                     stage.append(engine.summary())
-                elif batch == 0 and chain and consumed == 0:
-                    return _receipt(store, chain[-1][1])
+                elif stage is None and consumed:
+                    return _receipt(store, manifest)
+                if stage is None:
+                    stage = _Stage(root, store, generation, index)
                 _, manifest = stage.commit(engine, {"lines": engine.sequence, "prefix_sha256": digest.hexdigest()},
                                            parent, "finished" if stop_after is None else "paused")
                 return _receipt(store, manifest)
