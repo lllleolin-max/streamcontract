@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 
 from test_engine import spec
+from test_numeric_grouping import group_spec
 
 
 class CliTests(unittest.TestCase):
@@ -32,6 +33,23 @@ class CliTests(unittest.TestCase):
         resumed_code, second, _ = self.command("--resume", str(self.checkpoint))
         self.assertEqual(full, first[:-1] + second)
         self.assertEqual(code, resumed_code)
+
+    def test_cli_signed_zero_numeric_groups_every_resume_cut(self):
+        self.contract.write_text(json.dumps(group_spec()), encoding="utf-8")
+        events = [{"t": t, "x": x} for t, x in
+                  [(1, -0.0), (2, 0.0), (3, 0), (14, -0.0), (22, 0.0), (5, -0.0)]]
+        self.input.write_text(''.join(json.dumps(e) + '\n' for e in events), encoding="utf-8")
+        code, full, error = self.command()
+        self.assertEqual(code, 2)  # One intentionally late event remains quarantined.
+        self.assertEqual(error, b"")
+        for cut in range(len(events) + 1):
+            with self.subTest(cut=cut):
+                _, first, error = self.command("--stop-after", str(cut), "--checkpoint", str(self.checkpoint))
+                self.assertEqual(error, b"")
+                resumed_code, second, error = self.command("--resume", str(self.checkpoint))
+                self.assertEqual(error, b"")
+                self.assertEqual(resumed_code, code)
+                self.assertEqual(full, first[:-1] + second)
 
     def test_changed_source_prefix_rejected(self):
         self.input.write_text('{"t":1,"key":"a","x":1}\n{"t":2,"key":"a","x":2}\n')

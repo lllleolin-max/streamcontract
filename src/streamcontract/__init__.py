@@ -4,4 +4,4 @@ from .contract import Contract, ContractError
 from .engine import CheckpointError, Engine, ResourceLimit, SequenceError
 
 __all__ = ["Contract", "ContractError", "Engine", "CheckpointError", "ResourceLimit", "SequenceError"]
-__version__ = "0.2.0"
+__version__ = "0.2.1"

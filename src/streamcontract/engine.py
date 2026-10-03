@@ -315,8 +315,8 @@ class Engine:
                     known = {**bucket.values, contract.event_time: time}
                     if contract.group_by and all(name in known for name in contract.group_by):
                         # Numeric grouping inputs are observable as constant aggregates.
-                        # At most two legal JSON representations per numeric value,
-                        # hence at most 2**8 candidates, independent of event count.
+                        # Zero has up to three legal JSON representations (0, +/-0.0),
+                        # others at most two: at most 3**8 candidates, regardless of count.
                         candidates = [input_candidates(known[name].minimum, contract.fields[name])
                                       for name in contract.group_by]
                         if not any(hashlib.sha256(canonical(list(values))).hexdigest() == key

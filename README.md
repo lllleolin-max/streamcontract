@@ -14,7 +14,7 @@ python -m venv .venv
 # Windows PowerShell: .venv\Scripts\Activate.ps1
 python -m pip install build
 python -m build --wheel
-python -m pip install dist/streamcontract-0.2.0-py3-none-any.whl
+python -m pip install dist/streamcontract-0.2.1-py3-none-any.whl
 python -m unittest discover -s tests -v
 ```
 
@@ -74,4 +74,4 @@ Empty streams emit `EMPTY/investigate`; absent groups/windows are not synthesize
 
 ## Evidence status
 
-Tests and executable examples are the acceptance surface. [Iteration history](docs/ITERATIONS.md) preserves the five original real repairs and the subsequent independent checkpoint-domain rejection/repair. The frozen 0.1.0 artifact received independent scores 83/65/83 and FAIL because restore accepted impossible states; this repaired 0.2.0 artifact awaits re-review and does not inherit a passing score. Checked-in GitHub Actions covers Ubuntu/Windows and Python 3.11/3.14; remote execution is unknown until publication. Commercial willingness to pay, users and revenue are unknown.
+Tests and executable examples are the acceptance surface. [Iteration history](docs/ITERATIONS.md) preserves the five original real repairs and the subsequent independent checkpoint-domain and signed-zero recovery rejection/repairs. The frozen 0.1.0 artifact received independent scores 83/65/83 and FAIL because restore accepted impossible states. The 0.2.0 artifact received 84/65/84 and FAIL for genuine signed-zero group recovery. This repaired 0.2.1 artifact awaits re-review and does not inherit a passing score. Checked-in GitHub Actions covers Ubuntu/Windows and Python 3.11/3.14; remote execution is unknown until publication. Commercial willingness to pay, users and revenue are unknown.

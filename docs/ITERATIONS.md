@@ -120,3 +120,36 @@ seven contrasts resume equal; main event-time drift 1 vs shape/arrival/noaggrega
 ```
 
 [Raw after evidence](repair-evidence/checkpoint-domain-after.json), [tests](repair-evidence/tests.log), [independent probes](repair-evidence/independent-probes.log), [current validation](VALIDATION.md) and [structured results](validation-results.json) preserve observations. After: `d107ebb9044dbf8df5bba5ae6edbc7d04fd6a4f2`. This evidence commit links that substantive correction; all recorded source digests match its committed library sources. Re-review of 0.2.0 is pending. Witnesses cover retained numeric/time realizability, not actual upstream history, authenticated string-key preimages or finalized receipts; plausible fully realizable hostile replacement still needs authentication/protected storage.
+
+## Round 7 — genuine signed-zero grouping recovery
+
+Before: frozen `8331d4107244b096298adc56bb071d4651fbff68`, package 0.2.0/wire 3. Independent re-review scores were Commercial 84 / Technical 65 (raw 88, core cap) / Innovation 84, FAIL. The six preceding cycles, including the corrected four impossible-state cases, were independently verified and remain historical. Round 6's `2**8` representation claim was incomplete for zero and is preserved above as the historical claim being corrected here.
+
+The unchanged external `reviews/streamcontract_signed_zero_probe.py` has SHA-256 `69ea74ca52ddfc466608ff078c8d5b53cde2ac2a20d3021b9d707a95d584a294`. Before the source correction we ran it on the original installed 0.2.0 wheel, verifying both engine and moments source against frozen 8331d410. No checkpoint byte was altered. Actual output:
+
+```text
+Contract.validate({t:1,x:-0.0}): []
+push: ACCEPTED / stage; genuine checkpoint_version: 3
+genuine_checkpoint_restored: false
+error: group digest differs from retained numeric grouping witness
+exit: 1
+```
+
+[Raw before artifact/output](signed-zero-evidence/signed-zero-before.json) is preserved. Five new grouping tests ran against that same installed wheel: `-m unittest discover -s tests -p test_numeric_grouping.py -v`, 5 tests in 0.020s, FAILED (errors=19). The new CLI every-cut test ran with the original eight CLI tests: `-m unittest discover -s tests -p test_cli.py -v`, 9 tests in 3.680s, FAILED (failures=6). [Grouping before log](signed-zero-evidence/grouping-tests-before.log) and [CLI before log](signed-zero-evidence/cli-tests-before.log) record the actual failures; an additional rejection guard test was added after the correction.
+
+Cause: rational moments map all zero signs/types to mathematical zero while JSON group hashing preserves `[0]`, `[0.0]` and `[-0.0]`. `input_candidates` offered only the first two. Substantive correction: enumerate `-0.0` when the exact value is zero and the declaration is `number`, then retain the existing `Field.check` type/range/typed-enum filter. The integer domain and float enum equality semantics are unchanged. No new state, wire field or payload copy is required. Numeric lattice/histogram math is unchanged. Current code/proof/complexity bounds now use the product of legal candidates, at most `3**8 = 6,561` for eight zero-valued number keys, rather than `2**8`.
+
+Package 0.2.1 remains wire v3. Rebuilt wheel installed noneditable in `.venv-clean`; actual metadata is 0.2.1/SPDX MIT and import outside the checkout resolves to that environment's site-packages. Final verification:
+
+```text
+unchanged signed_zero_probe: before exit 1 -> after exit 0; genuine checkpoint bytes identical
+full suite: 56 tests in 3.857s, OK (prior 49 + 7 representation/recovery tests)
+unchanged four-domain probe: exit 0, all four impossible states rejected
+unchanged original probes: 6 tests in 1.193s, OK; 40 streams/3200 records/160 resumes equal
+unchanged numeric probes: 6 tests in 0.085s, OK; 55 enum/241 binary oracle cases retained
+actual installed CLI signed-zero JSONL: all 7 cuts prefix-verified and decisions equal
+SDK and original CLI workflow: equal; CLI exits 2/0/2/3
+seven contrasts: all resume equal; main event-time drift 1 vs shape/processing/noaggregate 0
+```
+
+[Raw after](signed-zero-evidence/signed-zero-after.json), [full tests](signed-zero-evidence/tests.log), [actual CLI cuts](signed-zero-evidence/signed-zero-cli-results.json), [current validation](VALIDATION.md) and [structured results](validation-results.json) preserve actual commands/results/source digests. The correction SHA is linked in the following evidence commit to avoid embedding its own hash. Independent re-review of 0.2.1 is pending; previous FAIL scores do not become PASS through this implementation report. Unkeyed checksums/realizability witnesses still do not authenticate actual histories or arbitrary string-key preimages.

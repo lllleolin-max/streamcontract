@@ -72,7 +72,7 @@ def quantum(bin_name: str) -> Fraction:
 
 
 def input_candidates(value: Fraction, declaration: Field) -> list[int | float]:
-    """Legal primitive representations of this one exact numeric value."""
+    """Legal JSON primitive representations, including both float zero signs."""
     if abs(value) > MAX_NUMBER:
         return []
     candidates = []
@@ -82,6 +82,8 @@ def input_candidates(value: Fraction, declaration: Field) -> list[int | float]:
         converted = float(value)
         if Fraction(converted) == value:
             candidates.append(converted)
+            if not value:
+                candidates.append(-0.0)
     return [candidate for candidate in candidates if declaration.check(candidate) is None]
 
 
