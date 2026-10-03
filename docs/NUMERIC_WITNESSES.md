@@ -1,0 +1,23 @@
+# Exact numeric-state realizability, checkpoint v3
+
+A public checksum can be recomputed. Restore must therefore reject numeric evidence that cannot arise from accepted primitives under the unchanged contract, independently of that checksum. v2 only used interval/extrema bounds: enum `[0,2,5]`, n=3, min=0, max=5, sum=8 satisfies broad bounds but its remaining value would have to be 3. Likewise, dyadic sums can be impossible at the available float precision. v3 retains bounded constructive witnesses, not event lists or a best-effort subset-sum solver.
+
+## Primitive and lattice checks
+
+Each serialized fraction is reduced with a positive power-of-two denominator <=2**1074 and a <=1200-bit numerator. All accepted integers and binary floats, and all their exact sums, are dyadic; 1/3 rejects. Each extremum must be an actual legal primitive: an integer for integer fields, or a round-trip-exact finite binary float/integer for number fields, with magnitude <=1e15 and all declared min/max/enum restrictions. A dyadic value such as 1+2**-53 cannot be a single binary64 input even though it is rational and between 1 and 2.
+
+An integer field without enum is one contiguous integer lattice. Ordinary number fields are split by sign and IEEE-754 binade: normal exponent e in [-1022,49] uses spacing 2**(e-52); each signed subnormal layer uses 2**-1074; zero has its own layer. Input magnitude <=1e15 yields at most 2147 possible layers. Within one layer, every lattice point between two legal extrema is a legal binary64 primitive. Each layer stores n/sum/min/max.
+
+For a layer with n>=2, reserve one occurrence of each observed extremum a and b. Let k=n-2 and r=sum-a-b. Feasibility is exactly: all numbers lie on the layer lattice, and k*a <= r <= k*b. After dividing by the spacing, any integer sum in this contiguous interval has a k-value construction using quotient/remainder distribution. For n=1, sum=min=max is required. This proves a realization without enumerating k samples, including very large k. Negative layers use the same signed lattice argument. Root n/sum/min/max must equal the reconstruction from all unique layers. Small exhaustive tests use independently enumerated adjacent-float multisets to verify the condition.
+
+## Enum and timestamp checks
+
+An enum field retains a frequency for each observed exact numeric value, bounded by the <=256 declared values. Every frequency is positive, every value has a legal enum primitive representation, and frequencies reconstruct the root count/sum/extrema exactly. Equivalent allowed int/float values may share an exact-value frequency; legal input representation existence is still checked. Invalid frequencies, duplicate entries, illegal values or an impossible joint sum reject. No gcd approximation, convex-only test or combinatorial feasibility budget is needed.
+
+Every group also retains event-time moments, even when no time aggregate is requested. Those integer/enum witnesses must fit the half-open window and recorded maximum. Across unfinished active windows the witnessed maximum must equal the global maximum; accepted-event conservation still holds. A time aggregate must match this independent time witness. With no grouping fields, only SHA-256 of canonical `[]` is accepted. Numeric grouping aggregates must be constant; when all keys are retained numeric witnesses, at most 2**8 legal JSON numeric representations are hashed to verify their identity. Arbitrary string-key preimages are not persisted or authenticated.
+
+## Boundaries
+
+Non-enum numbers retain at most `max_numeric_strata_per_field` layers (default128, never more than the finite2147 domain). New-layer overflow stops before consuming the event, leaves the checkpoint unchanged and reports ResourceLimit. Restoring an oversized layer set rejects. Enum state has a fixed declared bound. No event-count-sized memory allocation or search exists; tests restore feasible 100,000,000-event witnesses directly, including 0.1, smallest subnormal and 1e15 sums.
+
+These witnesses prove realizability of the retained per-field numeric aggregates under a flat independent field contract and their event-time/group constraints. They do not authenticate actual historical input, finalized outputs, arbitrary hashed string-key preimages or upstream identity. A writer may fabricate a different fully realizable history and public checksum. Numeric layer/enum statistics can reveal sensitive information, particularly small groups; use protected storage and disclosure controls. No raw event object or string grouping value is stored. v1/v2 checkpoints lack these witnesses and require input replay; they never silently inherit v3 guarantees.

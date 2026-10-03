@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import hmac
+import itertools
 import os
 import tempfile
 from dataclasses import dataclass, field
@@ -11,7 +12,8 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
-from .contract import Contract, ContractError, MAX_NUMBER, MAX_TIME, canonical, strict_json
+from .contract import Contract, MAX_TIME, canonical, strict_json
+from .moments import MomentError, Moments, binary_bin, input_candidates, read_moments
 
 
 class SequenceError(ValueError):
@@ -31,45 +33,26 @@ class CheckpointError(ValueError):
 
 
 @dataclass
-class Moments:
-    total: Fraction
-    minimum: Fraction
-    maximum: Fraction
-
-    def add(self, value: Fraction) -> None:
-        self.total += value
-        self.minimum = min(self.minimum, value)
-        self.maximum = max(self.maximum, value)
-
-
-@dataclass
 class Bucket:
     count: int = 0
     values: dict[str, Moments] = field(default_factory=dict)
+    time: Moments | None = None
 
-    def add(self, event: dict, names: tuple[str, ...]) -> None:
+    def add(self, event: dict, contract: Contract) -> None:
         self.count += 1
-        for name in names:
-            value = Fraction(event[name])
+        timestamp = event[contract.event_time]
+        if self.time is None:
+            self.time = Moments.first(timestamp, contract.fields[contract.event_time])
+        else:
+            self.time.add(timestamp)
+        for name in contract.numeric_fields:
+            if name == contract.event_time:
+                self.values[name] = self.time
+                continue
             if name in self.values:
-                self.values[name].add(value)
+                self.values[name].add(event[name])
             else:
-                self.values[name] = Moments(value, value, value)
-
-
-def rational(value: Fraction) -> list[int]:
-    return [value.numerator, value.denominator]
-
-
-def read_rational(value: Any) -> Fraction:
-    if type(value) is not list or len(value) != 2 or any(type(x) is not int for x in value):
-        raise CheckpointError("invalid rational state")
-    if abs(value[0]).bit_length() > 1200 or not 0 < value[1] <= 2**1074:
-        raise CheckpointError("rational state exceeds numeric domain")
-    result = Fraction(*value)
-    if rational(result) != value:
-        raise CheckpointError("noncanonical rational state")
-    return result
+                self.values[name] = Moments.first(event[name], contract.fields[name])
 
 
 def validate_source(source: Any, sequence: int) -> None:
@@ -155,13 +138,18 @@ class Engine:
             raise ResourceLimit("max_groups_per_window", seq)
         if group in groups and groups[group].count >= self.contract.limits["max_events_per_group"]:
             raise ResourceLimit("max_events_per_group", seq)
+        if group in groups:
+            for name, moments in groups[group].values.items():
+                if (moments.kind == "binary" and binary_bin(Fraction(event[name])) not in moments.strata
+                        and len(moments.strata) >= self.contract.limits["max_numeric_strata_per_field"]):
+                    raise ResourceLimit("max_numeric_strata_per_field", seq)
         out = [{"kind": "event", "sequence": seq, "status": "ACCEPTED", "action": "stage",
                 "evidence": [{"code": "window_assignment", "start_ms": start, "end_ms": end,
                               "group_sha256": group,
                               "behind_watermark": self.watermark is not None and timestamp < self.watermark}]}]
         self.sequence = seq
         self.stats["accepted"] += 1
-        self.windows.setdefault(start, {}).setdefault(group, Bucket()).add(event, self.contract.numeric_fields)
+        self.windows.setdefault(start, {}).setdefault(group, Bucket()).add(event, self.contract)
         self.max_event_time, self.watermark = candidate_max, candidate_watermark
         out.extend(self._close(candidate_watermark, "watermark"))
         return out
@@ -230,11 +218,11 @@ class Engine:
         windows = []
         for start, groups in sorted(self.windows.items()):
             windows.append({"start_ms": start, "groups": [
-                {"sha256": group, "count": bucket.count, "values": {
-                    name: {"sum": rational(m.total), "min": rational(m.minimum), "max": rational(m.maximum)}
+                {"sha256": group, "count": bucket.count, "time": bucket.time.encode(), "values": {
+                    name: m.encode()
                     for name, m in sorted(bucket.values.items())}}
                 for group, bucket in sorted(groups.items())]})
-        payload = {"version": 2, "contract_sha256": self.contract.digest, "sequence": self.sequence,
+        payload = {"version": 3, "contract_sha256": self.contract.digest, "sequence": self.sequence,
                    "max_event_time": self.max_event_time, "watermark": self.watermark,
                    "stats": dict(self.stats), "finished": self.finished, "windows": windows, "source": source}
         result = canonical({"payload": payload, "sha256": hashlib.sha256(canonical(payload)).hexdigest()})
@@ -256,7 +244,7 @@ class Engine:
             if type(document["sha256"]) is not str or not hmac.compare_digest(document["sha256"], digest):
                 raise CheckpointError("checkpoint checksum mismatch")
             expected_keys = {"version", "contract_sha256", "sequence", "max_event_time", "watermark", "stats", "finished", "windows", "source"}
-            if type(payload) is not dict or set(payload) != expected_keys or payload["version"] != 2 or type(payload["version"]) is not int:
+            if type(payload) is not dict or set(payload) != expected_keys or payload["version"] != 3 or type(payload["version"]) is not int:
                 raise CheckpointError("invalid checkpoint payload")
             if payload["contract_sha256"] != contract.digest:
                 raise CheckpointError("checkpoint contract mismatch")
@@ -288,6 +276,7 @@ class Engine:
             if type(windows) is not list or len(windows) > contract.limits["max_active_windows"] or (payload["finished"] and windows):
                 raise CheckpointError("invalid window count")
             active_events = 0
+            active_maximum = None
             for window in windows:
                 if type(window) is not dict or set(window) != {"start_ms", "groups"}:
                     raise CheckpointError("invalid window")
@@ -298,30 +287,41 @@ class Engine:
                     raise CheckpointError("invalid group count")
                 restored = {}
                 for group in groups:
-                    if type(group) is not dict or set(group) != {"sha256", "count", "values"}:
+                    if type(group) is not dict or set(group) != {"sha256", "count", "values", "time"}:
                         raise CheckpointError("invalid group")
                     key, count, values = group["sha256"], group["count"], group["values"]
                     if type(key) is not str or len(key) != 64 or any(c not in "0123456789abcdef" for c in key) or key in restored:
                         raise CheckpointError("invalid group digest")
+                    if not contract.group_by and key != hashlib.sha256(canonical([])).hexdigest():
+                        raise CheckpointError("ungrouped state has incompatible group identity")
                     if type(count) is not int or not 1 <= count <= contract.limits["max_events_per_group"]:
                         raise CheckpointError("invalid group event count")
                     if type(values) is not dict or set(values) != set(contract.numeric_fields):
                         raise CheckpointError("invalid numeric fields")
-                    bucket = Bucket(count)
+                    time = read_moments(group["time"], count, contract.fields[contract.event_time], contract.limits["max_numeric_strata_per_field"])
+                    if not start <= time.minimum <= time.maximum < start + contract.size_ms or time.maximum > maximum:
+                        raise CheckpointError("event time witness violates window or maximum")
+                    if contract.event_time in contract.group_by and time.minimum != time.maximum:
+                        raise CheckpointError("grouped event time is not constant")
+                    active_maximum = time.maximum if active_maximum is None else max(active_maximum, time.maximum)
+                    bucket = Bucket(count, time=time)
                     for name, state in values.items():
-                        if type(state) is not dict or set(state) != {"sum", "min", "max"}:
-                            raise CheckpointError("invalid aggregate state")
-                        total, lo, hi = (read_rational(state[k]) for k in ("sum", "min", "max"))
-                        if lo > hi or abs(lo) > MAX_NUMBER or abs(hi) > MAX_NUMBER or not count * lo <= total <= count * hi:
-                            raise CheckpointError("inconsistent aggregate state")
-                        declaration = contract.fields[name]
-                        if ((declaration.minimum is not None and lo < Fraction(declaration.minimum))
-                                or (declaration.maximum is not None and hi > Fraction(declaration.maximum))
-                                or (declaration.type == "integer" and any(x.denominator != 1 for x in (total, lo, hi)))
-                                or (count == 1 and not lo == hi == total)
-                                or (count > 1 and not (count - 1) * lo + hi <= total <= lo + (count - 1) * hi)):
-                            raise CheckpointError("aggregate violates declared domain or extrema")
-                        bucket.values[name] = Moments(total, lo, hi)
+                        moments = read_moments(state, count, contract.fields[name], contract.limits["max_numeric_strata_per_field"])
+                        if name == contract.event_time and moments.encode() != time.encode():
+                            raise CheckpointError("event time aggregate differs from time witness")
+                        if name in contract.group_by and moments.minimum != moments.maximum:
+                            raise CheckpointError("grouping field aggregate is not constant")
+                        bucket.values[name] = moments
+                    known = {**bucket.values, contract.event_time: time}
+                    if contract.group_by and all(name in known for name in contract.group_by):
+                        # Numeric grouping inputs are observable as constant aggregates.
+                        # At most two legal JSON representations per numeric value,
+                        # hence at most 2**8 candidates, independent of event count.
+                        candidates = [input_candidates(known[name].minimum, contract.fields[name])
+                                      for name in contract.group_by]
+                        if not any(hashlib.sha256(canonical(list(values))).hexdigest() == key
+                                   for values in itertools.product(*candidates)):
+                            raise CheckpointError("group digest differs from retained numeric grouping witness")
                     restored[key] = bucket
                     active_events += count
                 engine.windows[start] = restored
@@ -329,11 +329,15 @@ class Engine:
                 raise CheckpointError("accepted-event conservation mismatch")
             if not payload["finished"] and maximum is not None and maximum // contract.size_ms * contract.size_ms not in engine.windows:
                 raise CheckpointError("maximum event window missing")
+            if not payload["finished"] and maximum is not None and active_maximum != maximum:
+                raise CheckpointError("maximum event time differs from retained time witness")
             source = payload["source"]
             validate_source(source, seq)
             engine.sequence, engine.max_event_time, engine.watermark = seq, maximum, watermark
             engine.stats, engine.finished = stats, payload["finished"]
             return engine, source
+        except MomentError as exc:
+            raise CheckpointError(str(exc)) from exc
         except (ValueError, TypeError, KeyError, OverflowError, RecursionError) as exc:
             if isinstance(exc, CheckpointError):
                 raise

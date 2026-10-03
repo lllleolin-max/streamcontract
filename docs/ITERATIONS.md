@@ -96,3 +96,27 @@ FAILED (failures=2)
 ```
 
 Correction: compiled attributes reject deletion as well as assignment; restored maximum time must pass the compiled event-time field. After: `75ce3960585a2086fe32355f87f82a8a8530659a`. Rebuilt wheel/clean install verification observed 34 tests in 2.994s, OK; SDK and CLI full/resume equality and seven executed contrasts. [Final validation](VALIDATION.md) and [machine-readable results](validation-results.json) bind those observations to source digests. The report is a separate final evidence commit, so no commit attempts to embed its own hash. Plausible forged history and reflection remain outside the unkeyed integrity boundary.
+
+## Round 6 — independent rejection of impossible checkpoint domains
+
+Before: frozen `9ab3793e47330776dea6028a28a578818ca0b4c9`, package 0.1.0/wire 2. Independent scores were Commercial 83 / Technical 65 (raw 78, core cap) / Innovation 83, FAIL. The five original cycles above were independently reproduced as genuine; this new failure does not rewrite their history.
+
+The unchanged external `reviews/streamcontract_checkpoint_domain_probe.py` has SHA-256 `7bb8407fea8bee358ca175c0b375bcd83ebd276598f7131fff632064370e5017`. We ran it against the reviewer's original installed 0.1.0 wheel and confirmed engine source matches frozen 9ab3793. Actual before: exit 1; all four `accepted_impossible_state` values true. Enum [100,200] replaced by 0 released a failed window; rational 1/3, arbitrary ungrouped digest and timestamp 99 in window [0,10) with maximum 1 also restored. This is a declared-domain impossibility defect, not a demand to authenticate plausible history. [Raw before evidence](repair-evidence/checkpoint-domain-before.json) preserves command/output/artifact binding.
+
+Substantive correction: `moments.py` uses bounded enum frequencies and binary64 sign/binade integer-lattice witnesses to prove realizability. Proofs reconstruct count/sum/min/max, validate full primitive/enum/range domains and reserve both extrema before checking remaining sum. Integer fields use a direct lattice proof. Enum [0,2,5], n=3, min=0, max=5, sum=8 rejects even with legal extrema and convex bounds. Non-dyadic/unrepresentable extrema and off-lattice residual sums reject. Mandatory time moments enforce window/max/equality with time aggregates. Empty grouping uses its fixed digest; retained numeric grouping identities use at most 2**8 legal representations. New binary-layer overflow is transactional and bounded. There is no event-count expansion or subset-sum search.
+
+Package 0.2.0/wire 3 rejects old formats lacking mandatory witnesses; replay is required. Supported field/enum/window semantics remain. Fifteen new tests cover impossible joint enum sums, illegal/duplicate/old/missing witnesses, exact number domains, subnormal/cancellation every-cut resume, numeric grouping/time identity, atomic layer caps, independent exhaustive enum/adjacent-float multisets and feasible 100,000,000-event enum/normal/subnormal/large-value aggregates.
+
+Actual rebuilt noneditable wheel verification:
+
+```text
+unchanged checkpoint_domain_probe: exit 0; all four accepted_impossible_state=false
+full suite: 49 tests in 3.121s, OK
+unchanged independent probes: 6 tests in 2.199s, OK
+40 streams / 3200 records / 160 resume comparisons, zero mismatches
+SDK checkpoint 1117 bytes; full/resumed decisions and summary equal
+CLI full/pause/resume/corrupt exits 2/0/2/3; concatenated decisions equal
+seven contrasts resume equal; main event-time drift 1 vs shape/arrival/noaggregate 0
+```
+
+[Raw after evidence](repair-evidence/checkpoint-domain-after.json), [tests](repair-evidence/tests.log), [independent probes](repair-evidence/independent-probes.log), [current validation](VALIDATION.md) and [structured results](validation-results.json) preserve observations. The correction SHA is linked in the following evidence commit to avoid embedding its own hash. Re-review of 0.2.0 is pending. Witnesses cover retained numeric/time realizability, not actual upstream history, authenticated string-key preimages or finalized receipts; plausible fully realizable hostile replacement still needs authentication/protected storage.

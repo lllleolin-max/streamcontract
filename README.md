@@ -14,7 +14,7 @@ python -m venv .venv
 # Windows PowerShell: .venv\Scripts\Activate.ps1
 python -m pip install build
 python -m build --wheel
-python -m pip install dist/streamcontract-0.1.0-py3-none-any.whl
+python -m pip install dist/streamcontract-0.2.0-py3-none-any.whl
 python -m unittest discover -s tests -v
 ```
 
@@ -66,6 +66,7 @@ See [contract reference](docs/CONTRACT.md), [architecture and recovery boundarie
 - Integer epoch milliseconds, epoch-aligned `[start, end)` tumbling windows. Watermark is `max_accepted_timestamp - watermark_delay_ms`.
 - A record is too late when the **previous** watermark is `>= end + allowed_lateness_ms`. Accepted records update the watermark; windows finalize once at that deadline. There are no provisional/retraction outputs.
 - `count/sum/mean/min/max` checks use exact rational accumulators for parsed binary floats and integers. Inclusive bounds plus fixed-reference absolute drift; minimum sample size produces `INSUFFICIENT`, never a fabricated pass.
+- Checkpoint v3 carries bounded enum-frequency/binary-lattice witnesses and unconditional event-time statistics. Restore proves each retained numeric aggregate is realizable under its field domain, rejects incompatible v1/v2, and validates time/window/ungrouped identity. See [numeric witness proof](docs/NUMERIC_WITNESSES.md).
 - Active windows, per-window groups, per-group events, input bytes and checkpoint bytes have explicit limits. No sampling or silent eviction.
 - CLI stdout is JSONL, no raw payloads. Exit codes: `0` completed clean or paused without issues; `2` contract/late/invalid/empty issues; `3` incompatible checkpoint, IO failure or state limit; `argparse` usage errors exit `2` with stderr.
 
@@ -73,4 +74,4 @@ Empty streams emit `EMPTY/investigate`; absent groups/windows are not synthesize
 
 ## Evidence status
 
-Tests and executable examples are the acceptance surface. [Iteration history](docs/ITERATIONS.md) records real post-initial repairs and named commit evidence. Checked-in GitHub Actions covers Ubuntu/Windows and Python 3.11/3.14; remote execution is unknown until publication. Commercial willingness to pay, users, revenue and independently awarded scores are unknown.
+Tests and executable examples are the acceptance surface. [Iteration history](docs/ITERATIONS.md) preserves the five original real repairs and the subsequent independent checkpoint-domain rejection/repair. The frozen 0.1.0 artifact received independent scores 83/65/83 and FAIL because restore accepted impossible states; this repaired 0.2.0 artifact awaits re-review and does not inherit a passing score. Checked-in GitHub Actions covers Ubuntu/Windows and Python 3.11/3.14; remote execution is unknown until publication. Commercial willingness to pay, users and revenue are unknown.

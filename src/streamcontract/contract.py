@@ -176,7 +176,7 @@ class Contract:
         self.lateness_ms = integer(window.get("allowed_lateness_ms", 0), "allowed_lateness_ms")
         defaults = {"max_active_windows": 32, "max_groups_per_window": 128,
                     "max_events_per_group": 1000000, "max_event_bytes": 65536,
-                    "max_checkpoint_bytes": 16777216}
+                    "max_checkpoint_bytes": 16777216, "max_numeric_strata_per_field": 128}
         limits = keys(spec.get("limits", {}), set(defaults), set(), "limits")
         self.limits = {k: integer(limits.get(k, v), k, 1, 100000000) for k, v in defaults.items()}
         checks = spec["checks"]

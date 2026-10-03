@@ -21,8 +21,11 @@ All numeric event values and threshold/reference values must be finite, abs <= 1
 | `max_events_per_group` | 1,000,000 | stop before consuming next group event |
 | `max_event_bytes` | 65,536 | consume and quarantine oversized record |
 | `max_checkpoint_bytes` | 16,777,216 | reject oversized save/restore |
+| `max_numeric_strata_per_field` | 128 | stop before consuming a new binary precision layer in an existing group/field |
 
 Limit values are integers 1..100,000,000; they are configuration bounds, not a promise that the machine has that much memory. Select small realistic limits and filesystem quotas. No raw records are buffered awaiting closure. Window-count checks use the prospective watermark, so an event can close an old window and open a new one without being incorrectly blocked at a full bound.
+
+Numeric checkpoint witnesses add a bounded factor: integer fields use one lattice; enum fields use at most 256 distinct declared values; non-enum number fields use at most `min(max_numeric_strata_per_field, 2147)` binary precision/sign layers. A stream of repeated values may have 100,000,000 group events without growing these witnesses per event (if explicitly permitted by the group limit). A new layer at the configured bound raises ResourceLimit transactionally. No combinatorial search or sampled approximation is used in restore. Checkpoint wire v3 includes mandatory per-group time statistics and per-field proofs; wire v1/v2 reject and require input replay under 0.2.0.
 
 `checks[].expected` in output reproduces thresholds, reference and minimum samples. A failure reports `below_minimum`, `above_maximum` and/or `aggregate_drift`. `INSUFFICIENT` means too few accepted samples for that rule. A FAIL takes precedence over insufficiency in the same window. `sum` and other statistics are over accepted records only. A passing observed window does not cancel independent invalid/late quarantine outputs.
 
