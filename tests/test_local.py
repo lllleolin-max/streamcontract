@@ -297,6 +297,67 @@ class LocalTests(unittest.TestCase):
         process_local(self.contract, self.source, directory, commit_every=1)
         self.assertEqual([r['decision'] for r in self.rows(directory)], oracle(self.contract, self.source))
 
+    def test_null_missing_and_malformed_initial_pointers_reject(self):
+        for variant in ('null', 'missing', 'bad_initial'):
+            directory = self.root / variant
+            process_local(self.contract, self.source, directory)
+            pointer_path = directory / 'CURRENT.json'
+            pointer = json.loads(pointer_path.read_bytes())
+            if variant == 'null':
+                pointer['commit'] = None
+                pointer_path.write_bytes(canonical(pointer))
+            elif variant == 'missing':
+                pointer_path.unlink()
+            else:
+                pointer.pop('commit')
+                pointer['initial'] = 1
+                pointer_path.write_bytes(canonical(pointer))
+            names = sorted(p.name for p in directory.iterdir())
+            with self.assertRaises(CheckpointError):
+                next(read_committed(directory, self.contract))
+            with self.assertRaises(CheckpointError):
+                process_local(self.contract, self.source, directory)
+            self.assertEqual(sorted(p.name for p in directory.iterdir()), names)
+
+    def test_interrupted_first_generation_recovers_explicit_initial_pointer(self):
+        declaration = self.root / 'initial-contract.json'
+        declaration.write_bytes(canonical(self.contract.to_dict()))
+        for selected in ('stage_record_written', 'before_publish'):
+            directory = self.root / ('initial-' + selected)
+            marker = self.root / ('initial-' + selected + '.marker')
+            child = subprocess.Popen([sys.executable, '-c', WORKER, str(declaration), str(self.source),
+                                      str(directory), str(marker), selected], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            try:
+                deadline = time.monotonic() + 20
+                while not marker.exists() and child.poll() is None and time.monotonic() < deadline:
+                    time.sleep(.02)
+                self.assertTrue(marker.exists())
+            finally:
+                if child.poll() is None:
+                    child.terminate()
+                child.communicate(timeout=10)
+            self.assertEqual(self.rows(directory), [])
+            pointer = json.loads((directory / 'CURRENT.json').read_bytes())
+            self.assertIs(pointer['initial'], True)
+            process_local(self.contract, self.source, directory, commit_every=2)
+            self.assertEqual([r['decision'] for r in self.rows(directory)], oracle(self.contract, self.source))
+
+    def test_tiny_checkpoint_read_does_not_allocate_configured_100MB_cap(self):
+        import tracemalloc
+        declaration = spec()
+        declaration['limits'] = {'max_checkpoint_bytes': 100000000}
+        self.contract = Contract(declaration)
+        directory = self.root / 'large-cap-small-state'
+        process_local(self.contract, self.source, directory)
+        tracemalloc.start()
+        try:
+            rows = self.rows(directory)
+            _, peak = tracemalloc.get_traced_memory()
+        finally:
+            tracemalloc.stop()
+        self.assertEqual([r['decision'] for r in rows], oracle(self.contract, self.source))
+        self.assertLess(peak, 5000000)  # this tiny fixture, not a total process cap
+
 
 if __name__ == '__main__':
     unittest.main()

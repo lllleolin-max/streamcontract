@@ -61,7 +61,14 @@ def _file(root, name):
 
 def _read(root, name, cap):
     with _file(root, name).open("rb") as file:
-        raw = file.read(cap + 1)
+        size = os.fstat(file.fileno()).st_size
+        if size > cap:
+            _error("local metadata exceeds limit")
+        # read(cap) allocates the entire configured cap even for a tiny file.
+        # Immutable files have a known size; one extra byte detects growth.
+        raw = file.read(size + 1)
+    if len(raw) != size:
+        _error("local commit file changed while reading")
     if len(raw) > cap:
         _error("local metadata exceeds limit")
     return raw
@@ -107,6 +114,8 @@ def _writer(root, contract):
         _write(root / "IDENTITY.json", canonical({"version": 1, "store_id": uuid.uuid4().hex,
                                                  "contract_sha256": contract.digest}))
         _write(root / "LOCK", b"0")
+        identity = _identity(root, contract)
+        _write(root / "CURRENT.json", canonical({"version": 1, "store_id": identity, "initial": True}))
         _directory_sync(root)
     store = _identity(root, contract)  # existing unrelated directories are rejected
     lock = _file(root, "LOCK")
@@ -140,13 +149,18 @@ def _ref(value):
 def _chain(root, contract, store):
     """Capture one pointer, validate every immutable ancestor, restore latest v3."""
     if not (root / "CURRENT.json").exists():
-        return [], Engine(contract), None
+        _error("local commit pointer missing")
     pointer = _json(_read(root, "CURRENT.json", META_LIMIT))
+    if (type(pointer) is dict and set(pointer) == {"version", "store_id", "initial"}
+            and type(pointer["version"]) is int and pointer["version"] == 1
+            and pointer["store_id"] == store and pointer["initial"] is True):
+        return [], Engine(contract), None
     if (type(pointer) is not dict or set(pointer) != {"version", "store_id", "commit"}
             or type(pointer["version"]) is not int or pointer["version"] != 1
             or pointer["store_id"] != store):
         _error("invalid local commit pointer")
     reference = pointer["commit"]
+    _ref(reference)  # a published pointer cannot have a null/empty reference
     chain, seen = [], set()
     while reference is not None:
         _ref(reference)

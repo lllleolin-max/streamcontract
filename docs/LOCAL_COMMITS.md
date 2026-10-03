@@ -46,6 +46,11 @@ committed checkpoint automatically. SDK calls reject an input inside the bundle.
 1. A new directory receives a version-1 `IDENTITY.json` with a random store ID
    and exact contract digest, plus an OS advisory `LOCK`. Process termination
    releases the lock. A second cooperating writer fails without advancing state.
+   A typed `{version: 1, store_id, initial: true}` CURRENT pointer explicitly
+   denotes zero committed output before first publication. An owned directory
+   with a missing pointer is corrupt and cannot silently restart from sequence 0.
+   An interruption during directory initialization, before that initial pointer
+   exists, needs a new directory; no event has been processed at that point.
 2. A generation gets a unique `gORDINAL-UUID` name. Its `.outputs.jsonl` is written
    one bounded record at a time. Its `.checkpoint.json` is the original v3 engine
    checkpoint, including consumed source line count and exact prefix SHA-256.
@@ -97,6 +102,8 @@ reject duplicate JSON keys, BOMs, malformed UTF-8, NaN/Infinity, overflow to
 infinity, lone surrogates, oversized/truncated lines, extra envelope fields,
 wrong typed identities/counts, sequence disorder, duplicate/reordered rows,
 missing terminal summaries, foreign generations and file/hash/count mismatch.
+Missing CURRENT and null commit references reject; an explicit typed initial
+pointer is distinct from a damaged published pointer.
 The engine's existing bounded raw parser is reused unchanged for **input**;
 invalid/oversized input still consumes a quarantine decision, not a silent drop.
 
@@ -121,6 +128,12 @@ plus O(S + B + one output record), and do not re-enumerate old numeric groups fo
 each ancestor. The latest v3 restore retains its existing at-most-6,561 numeric
 group representation candidates. These are structural bounds, not a total RSS
 cap or a constant-memory claim.
+
+Immutable metadata/checkpoints are size-checked before reading and read using
+their actual file size plus one growth-detection byte. A large configured
+checkpoint cap does not itself allocate that full cap for every small snapshot;
+growth/truncation during the read rejects. Large actual snapshots still incur
+their bounded bytes and JSON/state reconstruction cost.
 
 Disk use includes every committed output and checkpoint generation and any
 abandoned stage files. There is no automatic pruning/compaction or disk quota.
