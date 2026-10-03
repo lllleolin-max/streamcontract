@@ -36,6 +36,16 @@ def emit(value: dict) -> None:
 
 
 def run(args) -> int:
+    if args.local_output:
+        from .local import process_local
+        root = Path(args.local_output).resolve()
+        for protected in (Path(args.input).resolve(), Path(args.contract).resolve()):
+            if protected == root or root in protected.parents:
+                raise CheckpointError("input and contract must be outside local output directory")
+        receipt = process_local(Contract.from_file(args.contract), args.input, args.local_output,
+                                stop_after=args.stop_after, commit_every=args.commit_every)
+        emit(receipt)
+        return receipt["exit_code"]
     if args.checkpoint:
         destination = Path(args.checkpoint).resolve()
         for protected in (Path(args.input).resolve(), Path(args.contract).resolve()):
@@ -104,9 +114,15 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--checkpoint", help="atomic checkpoint destination")
     parser.add_argument("--resume", help="unfinished checkpoint to restore")
     parser.add_argument("--stop-after", type=int, help="pause after this many NEW records, without EOF finalization")
+    parser.add_argument("--local-output", help="opt-in single-writer local committed output directory; auto-resume")
+    parser.add_argument("--commit-every", type=int, default=64, help="local commit batch size, 1..1000000 (default 64)")
     args = parser.parse_args(argv)
     if args.stop_after is not None and args.stop_after < 0:
         parser.error("--stop-after must be nonnegative")
+    if args.local_output and (args.checkpoint or args.resume):
+        parser.error("--local-output contains its own checkpoint; do not combine --checkpoint/--resume")
+    if not 1 <= args.commit_every <= 1000000:
+        parser.error("--commit-every must be in 1..1000000")
     try:
         return run(args)
     except (ContractError, CheckpointError, SequenceError, OSError, ResourceLimit) as exc:
