@@ -1,7 +1,5 @@
 {
   "verified_date": "2026-10-03",
-  "version": "0.2.0",
-  "checkpoint_format": 3,
   "environment": {
     "platform": "Windows-11-10.0.26200-SP0",
     "python": "3.14.3",
@@ -9,22 +7,14 @@
     "license_expression": "MIT",
     "editable": false
   },
-  "before_commit": "9ab3793e47330776dea6028a28a578818ca0b4c9",
-  "implementation_commit": "d107ebb9044dbf8df5bba5ae6edbc7d04fd6a4f2",
+  "implementation_commit": "75ce3960585a2086fe32355f87f82a8a8530659a",
   "source_sha256": {
-    "src/streamcontract/__init__.py": "aa0d91ba35c5b128cd49d4046aa9bbff41372ebe06108d9ba79c75cea35ee0a5",
+    "src/streamcontract/__init__.py": "d86ead05118606d86d6b0332f38d3fd1bd8588feff30c24fa1801ea65a80d668",
     "src/streamcontract/cli.py": "16e943c2f12a1619af18348eba3291128b732fe89f63b304750ceafc9fc3b68e",
-    "src/streamcontract/contract.py": "cf9eb96118e17f10065a3e5a11d7d5b5863d642cc4720db1172331cb9584a4a1",
-    "src/streamcontract/engine.py": "a6a10382abad8e5eecd3d59ea615aee09232de76be50aef305e7515a6c88f378",
-    "src/streamcontract/moments.py": "9db3cd7f1a8bfbfdd62554f58d7e327bf19b1d2c012c1a4df69957e2869baade"
+    "src/streamcontract/contract.py": "a7eaf45aa5f7044b2fb44258f0dbc3712684ff04718d4561c7f04da62f59c3fb",
+    "src/streamcontract/engine.py": "81e35c9c924ff8d90192626e8c5cb14a0cf19f5ffc044e3926e0aee3c86d7ffd"
   },
   "commands": {
-    "checkpoint-domain-after": {
-      "arguments": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_checkpoint_domain_probe.py"
-      ],
-      "exit": 0
-    },
     "tests": {
       "arguments": [
         "-m",
@@ -36,19 +26,13 @@
       ],
       "exit": 0
     },
-    "independent-probes": {
-      "arguments": [
-        "D:\\coding 总览\\GitHub水王\\work\\ten-projects\\reviews\\streamcontract_independent_probes.py"
-      ],
-      "exit": 0
-    },
     "sdk": {
       "arguments": [
         "examples/workflow.py"
       ],
       "exit": 0
     },
-    "cli-workflow": {
+    "cli_workflow": {
       "arguments": [
         "examples/cli_workflow.py"
       ],
@@ -60,10 +44,10 @@
       ],
       "exit": 0
     },
-    "outside-checkout-import": {
+    "outside_checkout_import": {
       "arguments": [
         "-c",
-        "import streamcontract,importlib.metadata,json; print(json.dumps({'version':streamcontract.__version__,'module':streamcontract.__file__,'license':importlib.metadata.metadata('streamcontract').get('License-Expression')}))"
+        "import streamcontract,importlib.metadata,json; print(json.dumps({'module':streamcontract.__file__,'license':importlib.metadata.metadata('streamcontract').get('License-Expression')}))"
       ],
       "exit": 0
     },
@@ -80,24 +64,13 @@
   },
   "test_summary": [
     "----------------------------------------------------------------------",
-    "Ran 49 tests in 3.121s",
+    "Ran 34 tests in 2.994s",
     "",
     "OK"
   ],
-  "independent_probe_summary": [
-    "----------------------------------------------------------------------",
-    "Ran 6 tests in 2.199s",
-    "",
-    "OK"
-  ],
-  "domain_probe": {
-    "before_exit": 1,
-    "after_exit": 0,
-    "same_script_sha256": "7bb8407fea8bee358ca175c0b375bcd83ebd276598f7131fff632064370e5017"
-  },
   "sdk": {
     "resumed_equal": true,
-    "checkpoint_bytes": 1117,
+    "checkpoint_bytes": 752,
     "summary": {
       "kind": "summary",
       "status": "ISSUES",
@@ -430,12 +403,16 @@
       "consumed": 16,
       "next_sequence": 17,
       "active_groups": 16,
-      "python_allocation_peak_bytes": 18275,
-      "seconds": 0.001463299966417253
+      "python_allocation_peak_bytes": 8595,
+      "seconds": 0.0007987000280991197
     }
   },
   "remote_ci": "not yet published/executed",
   "python_311_runtime": "not available locally",
-  "independent_scores": "prior frozen 0.1.0: 83/65/83 FAIL; repaired 0.2.0 re-review pending",
-  "verification_context": "Commands ran on the identical source working tree immediately before the correction commit; recorded SHA-256 values match all committed library sources."
+  "independent_scores": "not awarded",
+  "verification_context": "Executed on identical working-tree source immediately before implementation commit; final evidence commit adds CLI example, benchmark assertions, README/CI and this observation.",
+  "demonstration_sha256": {
+    "examples/cli_workflow.py": "e53d829edbd01634ab7e41b7792b9ad54e95f5b6155307006814b7cdf253275b",
+    "benchmarks/compare.py": "205e77a2ce251ec2f2fbebd26c2e6c9ef3ab14ce25e7f937d3516e313ed95f45"
+  }
 }

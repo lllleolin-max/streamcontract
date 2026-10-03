@@ -1,0 +1,208 @@
+{
+  "artifact_commit": "9ab3793e47330776dea6028a28a578818ca0b4c9",
+  "version": "0.1.0",
+  "script_sha256": "7bb8407fea8bee358ca175c0b375bcd83ebd276598f7131fff632064370e5017",
+  "command": [
+    "D:\\coding \u603b\u89c8\\GitHub\u6c34\u738b\\work\\ten-projects\\reviews\\streamcontract-review-evidence\\venv\\Scripts\\python.exe",
+    "D:\\coding \u603b\u89c8\\GitHub\u6c34\u738b\\work\\ten-projects\\reviews\\streamcontract_checkpoint_domain_probe.py"
+  ],
+  "exit": 1,
+  "engine_source_matches_frozen_commit": true,
+  "results": [
+    {
+      "original_decisions": [
+        {
+          "kind": "window",
+          "sequence": 1,
+          "status": "FAIL",
+          "action": "quarantine",
+          "evidence": {
+            "start_ms": 0,
+            "end_ms": 10,
+            "group_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "trigger": "end_of_stream",
+            "watermark_ms": -9,
+            "sample_count": 1,
+            "checks": [
+              {
+                "name": "limit",
+                "op": "mean",
+                "observed": 100.0,
+                "status": "FAIL",
+                "reasons": [
+                  "above_maximum"
+                ],
+                "sample_count": 1,
+                "expected": {
+                  "min": null,
+                  "max": 50,
+                  "reference": null,
+                  "max_absolute_delta": null,
+                  "min_samples": 1
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "invalid_event_zero": [
+        {
+          "code": "enum",
+          "field": "x"
+        }
+      ]
+    },
+    {
+      "probe": "numeric_enum_impossible_zero_changes_FAIL_to_PASS",
+      "accepted_impossible_state": true,
+      "decisions": [
+        {
+          "kind": "window",
+          "sequence": 1,
+          "status": "PASS",
+          "action": "release",
+          "evidence": {
+            "start_ms": 0,
+            "end_ms": 10,
+            "group_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "trigger": "end_of_stream",
+            "watermark_ms": -9,
+            "sample_count": 1,
+            "checks": [
+              {
+                "name": "limit",
+                "op": "mean",
+                "observed": 0.0,
+                "status": "PASS",
+                "reasons": [],
+                "sample_count": 1,
+                "expected": {
+                  "min": null,
+                  "max": 50,
+                  "reference": null,
+                  "max_absolute_delta": null,
+                  "min_samples": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "probe": "non_binary_input_minimum_one_third",
+      "accepted_impossible_state": true,
+      "decisions": [
+        {
+          "kind": "window",
+          "sequence": 1,
+          "status": "PASS",
+          "action": "release",
+          "evidence": {
+            "start_ms": 0,
+            "end_ms": 10,
+            "group_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "trigger": "end_of_stream",
+            "watermark_ms": -9,
+            "sample_count": 1,
+            "checks": [
+              {
+                "name": "limit",
+                "op": "mean",
+                "observed": 0.3333333333333333,
+                "status": "PASS",
+                "reasons": [],
+                "sample_count": 1,
+                "expected": {
+                  "min": null,
+                  "max": 50,
+                  "reference": null,
+                  "max_absolute_delta": null,
+                  "min_samples": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "probe": "ungrouped_digest_not_hash_of_empty_tuple",
+      "accepted_impossible_state": true,
+      "decisions": [
+        {
+          "kind": "window",
+          "sequence": 1,
+          "status": "FAIL",
+          "action": "quarantine",
+          "evidence": {
+            "start_ms": 0,
+            "end_ms": 10,
+            "group_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "trigger": "end_of_stream",
+            "watermark_ms": -9,
+            "sample_count": 1,
+            "checks": [
+              {
+                "name": "limit",
+                "op": "mean",
+                "observed": 100.0,
+                "status": "FAIL",
+                "reasons": [
+                  "above_maximum"
+                ],
+                "sample_count": 1,
+                "expected": {
+                  "min": null,
+                  "max": 50,
+                  "reference": null,
+                  "max_absolute_delta": null,
+                  "min_samples": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "probe": "timestamp_moments_outside_recorded_window_and_maximum",
+      "accepted_impossible_state": true,
+      "decisions": [
+        {
+          "kind": "window",
+          "sequence": 1,
+          "status": "FAIL",
+          "action": "quarantine",
+          "evidence": {
+            "start_ms": 0,
+            "end_ms": 10,
+            "group_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "trigger": "end_of_stream",
+            "watermark_ms": -9,
+            "sample_count": 1,
+            "checks": [
+              {
+                "name": "t",
+                "op": "max",
+                "observed": 99.0,
+                "status": "FAIL",
+                "reasons": [
+                  "above_maximum"
+                ],
+                "sample_count": 1,
+                "expected": {
+                  "min": null,
+                  "max": 9,
+                  "reference": null,
+                  "max_absolute_delta": null,
+                  "min_samples": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

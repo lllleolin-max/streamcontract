@@ -1,0 +1,166 @@
+{
+  "resumed_equal": true,
+  "checkpoint_bytes": 1117,
+  "summary": {
+    "kind": "summary",
+    "status": "ISSUES",
+    "action": "quarantine",
+    "sequence": 11,
+    "contract_sha256": "dcfd6dc8ea629c75147dd6ba4187d920009aa860563cb7921c4adb91537ccc20",
+    "watermark_ms": 2300,
+    "stats": {
+      "accepted": 9,
+      "invalid": 1,
+      "late": 1,
+      "windows": 3,
+      "failed": 1,
+      "insufficient": 0,
+      "finalized_events": 9
+    },
+    "active_windows": 0,
+    "active_groups": 0,
+    "finished": true
+  },
+  "windows": [
+    {
+      "kind": "window",
+      "sequence": 5,
+      "status": "PASS",
+      "action": "release",
+      "evidence": {
+        "start_ms": 0,
+        "end_ms": 1000,
+        "group_sha256": "f9f77b923b27b0243024cff36c771c0ffbec1e32a11b8c9a9a04c11d5b178ecb",
+        "trigger": "watermark",
+        "watermark_ms": 1300,
+        "sample_count": 2,
+        "checks": [
+          {
+            "name": "volume",
+            "op": "count",
+            "observed": 2.0,
+            "status": "PASS",
+            "reasons": [],
+            "sample_count": 2,
+            "expected": {
+              "min": 2,
+              "max": 6,
+              "reference": null,
+              "max_absolute_delta": null,
+              "min_samples": 1
+            }
+          },
+          {
+            "name": "latency_shift",
+            "op": "mean",
+            "observed": 100.0,
+            "status": "PASS",
+            "reasons": [],
+            "sample_count": 2,
+            "expected": {
+              "min": null,
+              "max": null,
+              "reference": 100,
+              "max_absolute_delta": 25,
+              "min_samples": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "window",
+      "sequence": 10,
+      "status": "FAIL",
+      "action": "quarantine",
+      "evidence": {
+        "start_ms": 1000,
+        "end_ms": 2000,
+        "group_sha256": "f9f77b923b27b0243024cff36c771c0ffbec1e32a11b8c9a9a04c11d5b178ecb",
+        "trigger": "watermark",
+        "watermark_ms": 2300,
+        "sample_count": 4,
+        "checks": [
+          {
+            "name": "volume",
+            "op": "count",
+            "observed": 4.0,
+            "status": "PASS",
+            "reasons": [],
+            "sample_count": 4,
+            "expected": {
+              "min": 2,
+              "max": 6,
+              "reference": null,
+              "max_absolute_delta": null,
+              "min_samples": 1
+            }
+          },
+          {
+            "name": "latency_shift",
+            "op": "mean",
+            "observed": 200.0,
+            "status": "FAIL",
+            "reasons": [
+              "aggregate_drift"
+            ],
+            "sample_count": 4,
+            "expected": {
+              "min": null,
+              "max": null,
+              "reference": 100,
+              "max_absolute_delta": 25,
+              "min_samples": 2
+            }
+          }
+        ]
+      }
+    },
+    {
+      "kind": "window",
+      "sequence": 11,
+      "status": "PASS",
+      "action": "release",
+      "evidence": {
+        "start_ms": 2000,
+        "end_ms": 3000,
+        "group_sha256": "f9f77b923b27b0243024cff36c771c0ffbec1e32a11b8c9a9a04c11d5b178ecb",
+        "trigger": "end_of_stream",
+        "watermark_ms": 2300,
+        "sample_count": 3,
+        "checks": [
+          {
+            "name": "volume",
+            "op": "count",
+            "observed": 3.0,
+            "status": "PASS",
+            "reasons": [],
+            "sample_count": 3,
+            "expected": {
+              "min": 2,
+              "max": 6,
+              "reference": null,
+              "max_absolute_delta": null,
+              "min_samples": 1
+            }
+          },
+          {
+            "name": "latency_shift",
+            "op": "mean",
+            "observed": 100.0,
+            "status": "PASS",
+            "reasons": [],
+            "sample_count": 3,
+            "expected": {
+              "min": null,
+              "max": null,
+              "reference": 100,
+              "max_absolute_delta": 25,
+              "min_samples": 2
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

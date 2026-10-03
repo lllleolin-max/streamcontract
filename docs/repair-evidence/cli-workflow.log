@@ -1,0 +1,29 @@
+{
+  "input_records": 11,
+  "full_exit": 2,
+  "pause_exit": 0,
+  "resume_exit": 2,
+  "corrupt_exit": 3,
+  "source_prefix_verified": true,
+  "decisions_equal": true,
+  "summary": {
+    "action": "quarantine",
+    "active_groups": 0,
+    "active_windows": 0,
+    "contract_sha256": "dcfd6dc8ea629c75147dd6ba4187d920009aa860563cb7921c4adb91537ccc20",
+    "finished": true,
+    "kind": "summary",
+    "sequence": 11,
+    "stats": {
+      "accepted": 9,
+      "failed": 1,
+      "finalized_events": 9,
+      "insufficient": 0,
+      "invalid": 1,
+      "late": 1,
+      "windows": 3
+    },
+    "status": "ISSUES",
+    "watermark_ms": 2300
+  }
+}

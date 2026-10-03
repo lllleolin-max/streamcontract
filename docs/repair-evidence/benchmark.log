@@ -1,0 +1,286 @@
+{
+  "fixture": "disclosed synthetic; no incumbents executed",
+  "scenarios": [
+    {
+      "scenario": "drift_hidden_in_arrival_mix",
+      "records": 6,
+      "batch_shape": {
+        "invalid": 0,
+        "failed_windows": 0,
+        "late": 0,
+        "scope": "row shape/domain only"
+      },
+      "processing_time": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 6
+      },
+      "event_time": {
+        "status": "ISSUES",
+        "failed_windows": 1,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 6
+      },
+      "ablation_no_aggregate": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 6
+      },
+      "ablation_no_disorder_budget": {
+        "status": "ISSUES",
+        "failed_windows": 2,
+        "late": 1,
+        "insufficient": 0,
+        "accepted": 5
+      },
+      "resume_equal": true
+    },
+    {
+      "scenario": "clean_bounded_disorder",
+      "records": 6,
+      "batch_shape": {
+        "invalid": 0,
+        "failed_windows": 0,
+        "late": 0,
+        "scope": "row shape/domain only"
+      },
+      "processing_time": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 6
+      },
+      "event_time": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 6
+      },
+      "ablation_no_aggregate": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 6
+      },
+      "ablation_no_disorder_budget": {
+        "status": "ISSUES",
+        "failed_windows": 1,
+        "late": 1,
+        "insufficient": 0,
+        "accepted": 5
+      },
+      "resume_equal": true
+    },
+    {
+      "scenario": "adverse_too_small_watermark_delay",
+      "records": 4,
+      "batch_shape": {
+        "invalid": 0,
+        "failed_windows": 0,
+        "late": 0,
+        "scope": "row shape/domain only"
+      },
+      "processing_time": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 4
+      },
+      "event_time": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 4
+      },
+      "ablation_no_aggregate": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 4
+      },
+      "ablation_no_disorder_budget": {
+        "status": "ISSUES",
+        "failed_windows": 1,
+        "late": 1,
+        "insufficient": 0,
+        "accepted": 3
+      },
+      "resume_equal": true
+    },
+    {
+      "scenario": "declared_late_after_close",
+      "records": 4,
+      "batch_shape": {
+        "invalid": 0,
+        "failed_windows": 0,
+        "late": 0,
+        "scope": "row shape/domain only"
+      },
+      "processing_time": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 4
+      },
+      "event_time": {
+        "status": "ISSUES",
+        "failed_windows": 1,
+        "late": 1,
+        "insufficient": 0,
+        "accepted": 3
+      },
+      "ablation_no_aggregate": {
+        "status": "ISSUES",
+        "failed_windows": 1,
+        "late": 1,
+        "insufficient": 0,
+        "accepted": 3
+      },
+      "ablation_no_disorder_budget": {
+        "status": "ISSUES",
+        "failed_windows": 1,
+        "late": 1,
+        "insufficient": 0,
+        "accepted": 3
+      },
+      "resume_equal": true
+    },
+    {
+      "scenario": "empty",
+      "records": 0,
+      "batch_shape": {
+        "invalid": 0,
+        "failed_windows": 0,
+        "late": 0,
+        "scope": "row shape/domain only"
+      },
+      "processing_time": {
+        "status": "EMPTY",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 0
+      },
+      "event_time": {
+        "status": "EMPTY",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 0
+      },
+      "ablation_no_aggregate": {
+        "status": "EMPTY",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 0
+      },
+      "ablation_no_disorder_budget": {
+        "status": "EMPTY",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 0
+      },
+      "resume_equal": true
+    },
+    {
+      "scenario": "exact_half_open_boundary",
+      "records": 4,
+      "batch_shape": {
+        "invalid": 0,
+        "failed_windows": 0,
+        "late": 0,
+        "scope": "row shape/domain only"
+      },
+      "processing_time": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 4
+      },
+      "event_time": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 4
+      },
+      "ablation_no_aggregate": {
+        "status": "COMPLETE",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 4
+      },
+      "ablation_no_disorder_budget": {
+        "status": "ISSUES",
+        "failed_windows": 1,
+        "late": 1,
+        "insufficient": 0,
+        "accepted": 3
+      },
+      "resume_equal": true
+    },
+    {
+      "scenario": "invalid_row_cannot_advance_watermark",
+      "records": 3,
+      "batch_shape": {
+        "invalid": 1,
+        "failed_windows": 0,
+        "late": 0,
+        "scope": "row shape/domain only"
+      },
+      "processing_time": {
+        "status": "ISSUES",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 2
+      },
+      "event_time": {
+        "status": "ISSUES",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 2
+      },
+      "ablation_no_aggregate": {
+        "status": "ISSUES",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 2
+      },
+      "ablation_no_disorder_budget": {
+        "status": "ISSUES",
+        "failed_windows": 0,
+        "late": 0,
+        "insufficient": 0,
+        "accepted": 2
+      },
+      "resume_equal": true
+    }
+  ],
+  "cardinality_limit": {
+    "offered_records": 10000,
+    "consumed": 16,
+    "next_sequence": 17,
+    "active_groups": 16,
+    "python_allocation_peak_bytes": 18275,
+    "seconds": 0.001463299966417253
+  }
+}
