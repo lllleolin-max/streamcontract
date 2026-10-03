@@ -1,0 +1,11 @@
+{"event_ms":100,"service":"checkout","latency_ms":100,"request_id":"synthetic-01"}
+{"event_ms":1100,"service":"checkout","latency_ms":210,"request_id":"synthetic-02"}
+{"event_ms":800,"service":"checkout","latency_ms":100,"request_id":"synthetic-03"}
+{"event_ms":1200,"service":"checkout","latency_ms":190,"request_id":"synthetic-04"}
+{"event_ms":1600,"service":"checkout","latency_ms":200,"request_id":"synthetic-05"}
+{"event_ms":900,"service":"checkout","latency_ms":500,"request_id":"synthetic-too-late"}
+{"event_ms":2100,"service":"checkout","latency_ms":100,"request_id":"synthetic-07"}
+{"event_ms":1900,"service":"checkout","latency_ms":200,"request_id":"synthetic-08"}
+{"event_ms":2200,"service":"checkout","latency_ms":100,"request_id":"synthetic-09"}
+{"event_ms":2600,"service":"checkout","latency_ms":100,"request_id":"synthetic-10"}
+{"event_ms":2700,"service":"checkout","latency_ms":"redacted-value","request_id":"synthetic-invalid"}

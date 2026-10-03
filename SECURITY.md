@@ -1,0 +1,9 @@
+# Security and evidence handling
+
+No raw event or grouping value is retained or included in output. Event error evidence contains declared field names and reason codes; extra unknown names are suppressed. Reports contain numeric aggregates, counts, timestamps, sequence IDs, contract digest and stable group hashes. These can still reveal sensitive facts, particularly a singleton or a low-entropy grouping key. SHA-256 is **not anonymization**: known keys can be guessed. Apply access controls, aggregate disclosure policy and retention limits; choose grouping fields deliberately. This is payload minimization, not a general privacy guarantee or differential privacy.
+
+A checkpoint SHA-256 checksum is public and unkeyed. Anyone with write access can forge a checksum and consistent state. Invariant checks catch impossible state, not all forged plausible histories. Protect checkpoint/input directories, and authenticate or sign envelopes externally if adversarial tampering is in scope. Do not treat digest equality as producer identity or authorization. The input file is not snapshotted or locked; concurrent rewrites after prefix verification are outside the supported append-only workflow.
+
+Bounded raw reading, field/contract limits, numeric domain checks and active-state caps reduce memory hazards. Very large configured caps still consume substantial memory. No OS sandbox, encrypted checkpoint or isolation from a compromised Python process is supplied. Do not execute untrusted plugin code; no plugin/SQL execution is needed here.
+
+Report a suspected issue privately to the repository maintainer using GitHub's private vulnerability reporting if enabled; otherwise request a private contact without posting payloads or secrets. Include version, a small synthetic reproducer, expected action and observed output. Availability of a hosted reporting channel is unknown until the repository is published.

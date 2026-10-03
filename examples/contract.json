@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "event_time": "event_ms",
+  "fields": {
+    "event_ms": {"type": "integer", "min": 0},
+    "service": {"type": "string", "max_length": 64},
+    "latency_ms": {"type": "number", "min": 0, "max": 10000},
+    "request_id": {"type": "string", "max_length": 128}
+  },
+  "group_by": ["service"],
+  "window": {"size_ms": 1000, "watermark_delay_ms": 300, "allowed_lateness_ms": 300},
+  "limits": {"max_active_windows": 4, "max_groups_per_window": 8, "max_events_per_group": 10000},
+  "checks": [
+    {"name": "volume", "op": "count", "min": 2, "max": 6},
+    {"name": "latency_shift", "op": "mean", "field": "latency_ms", "reference": 100, "max_absolute_delta": 25, "min_samples": 2}
+  ]
+}
