@@ -98,6 +98,28 @@ class EngineTests(unittest.TestCase):
             with self.assertRaises(ContractError):
                 Contract(s)
 
+    def test_compiled_contract_cannot_change_behind_digest(self):
+        c = Contract(spec())
+        e = Engine(c)
+        e.push(event(1))
+        before = e.checkpoint()
+        with self.assertRaises(TypeError):
+            c.limits["max_groups_per_window"] = 1
+        with self.assertRaises(TypeError):
+            c.fields["x"] = c.fields["t"]
+        with self.assertRaises(AttributeError):
+            c.size_ms = 20
+        self.assertEqual(e.checkpoint(), before)
+
+    def test_contract_export_is_detached(self):
+        original = spec()
+        c = Contract(original)
+        original["window"]["size_ms"] = 999
+        exported = c.to_dict()
+        exported["window"]["size_ms"] = 888
+        self.assertEqual(c.size_ms, 10)
+        self.assertEqual(c.to_dict()["window"]["size_ms"], 10)
+
     def test_drift_and_insufficient(self):
         s = spec()
         s["checks"][0]["min_samples"] = 2

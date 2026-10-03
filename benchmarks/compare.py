@@ -75,7 +75,7 @@ def main():
                         "ablation_no_aggregate": metrics(no_drift), "ablation_no_disorder_budget": metrics(zero_delay),
                         "resume_equal": True})
     # High cardinality must STOP, not keep allocating or silently drop keys.
-    s = deepcopy(contract()._spec)
+    s = contract().to_dict()
     s["limits"] = {"max_groups_per_window": 16}
     engine = Engine(Contract(s))
     tracemalloc.start()

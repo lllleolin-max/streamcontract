@@ -8,6 +8,7 @@ import math
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any
 
 MAX_NUMBER = 1e15
@@ -100,6 +101,14 @@ class Rule:
 
 class Contract:
     """Compile a supported flat JSON contract. Unknown options fail closed."""
+
+    __slots__ = ("fields", "event_time", "group_by", "size_ms", "delay_ms", "lateness_ms", "limits",
+                 "rules", "numeric_fields", "_encoded_spec", "digest", "_frozen")
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if getattr(self, "_frozen", False):
+            raise AttributeError("compiled contract is immutable; build a new Contract")
+        object.__setattr__(self, name, value)
 
     def __init__(self, spec: dict):
         try:
@@ -197,8 +206,15 @@ class Contract:
             raise ContractError("duplicate check name")
         self.rules = tuple(rules)
         self.numeric_fields = tuple(sorted({r.field for r in rules if r.field is not None}))
-        self._spec = spec
-        self.digest = hashlib.sha256(canonical(spec)).hexdigest()
+        self._encoded_spec = canonical(spec)
+        self.digest = hashlib.sha256(self._encoded_spec).hexdigest()
+        self.fields = MappingProxyType(self.fields)
+        self.limits = MappingProxyType(self.limits)
+        self._frozen = True
+
+    def to_dict(self) -> dict:
+        """Return a detached declaration for building a revised contract."""
+        return strict_json(self._encoded_spec)
 
     @classmethod
     def from_file(cls, path: str | Path) -> "Contract":

@@ -40,6 +40,25 @@ Ran 28 tests in 2.121s
 FAILED (failures=1, errors=2)
 ```
 
-Correction: magnitude comparison precedes float finiteness checking; integers never undergo the conversion. Validate group and aggregate field names before hash lookup, and normalize malformed constructor declarations to privacy-safe ContractError. Verification: rebuild/force-reinstall the wheel and rerun the full suite; observed 28 tests OK. The huge record now yields `INVALID/numeric_domain`, consumes exactly one sequence, and the next valid record continues normally. After: recorded by the Round 2 code commit (full SHA added next round).
+Correction: magnitude comparison precedes float finiteness checking; integers never undergo the conversion. Validate group and aggregate field names before hash lookup, and normalize malformed constructor declarations to privacy-safe ContractError. Verification: rebuild/force-reinstall the wheel and rerun the full suite; observed 28 tests OK. The huge record now yields `INVALID/numeric_domain`, consumes exactly one sequence, and the next valid record continues normally. After: `ef7aa82a5d1393de41c46d61794932f0d6dacbad`.
 
 Remaining boundary: the JSON parser's own digit/depth protections may classify even larger integers as `invalid_json`; both classifications are explicit quarantine dispositions.
+
+## Round 3 — immutable compiled contract identity
+
+Before: `ef7aa82a5d1393de41c46d61794932f0d6dacbad`. SDK review found public `limits`/`fields` dictionaries and window attributes could be changed after the contract digest was calculated. A shared Contract could therefore change event acceptance/window assignment while writing checkpoints under its old identity. Caller input was already deep-copied, but the compiled object's own exposed configuration was mutable.
+
+Reproduction: add `test_compiled_contract_cannot_change_behind_digest` and detached-export support test; run `.venv\Scripts\python.exe -m unittest discover -s tests -p test_engine.py -v` against the Round 2 installed wheel. Actual output:
+
+```text
+FAIL: test_compiled_contract_cannot_change_behind_digest
+AssertionError: TypeError not raised
+ERROR: test_contract_export_is_detached
+AttributeError: 'Contract' object has no attribute 'to_dict'
+Ran 24 tests in 0.017s
+FAILED (failures=1, errors=1)
+```
+
+The first failure is the pre-existing identity defect; the export test is the new supported path for intentionally revising configuration. Correction: slot-based immutable compiled attributes, read-only mapping proxies, immutable rule/field records and encoded immutable declaration; `to_dict()` yields a detached copy. Benchmark ablation now uses the public export API. Verification: rebuild/force-reinstall, all 30 tests, SDK workflow and six executable contrasts; observed all tests OK, full/resume equality and one drift failure versus zero in shape/arrival-time/no-aggregate baselines. After: recorded by the Round 3 code commit (full SHA added in the final evidence commit).
+
+Remaining boundary: hostile code in the same Python process can use reflection to bypass ordinary object immutability. No in-process security sandbox is claimed.
