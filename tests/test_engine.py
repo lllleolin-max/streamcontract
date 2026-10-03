@@ -109,7 +109,21 @@ class EngineTests(unittest.TestCase):
             c.fields["x"] = c.fields["t"]
         with self.assertRaises(AttributeError):
             c.size_ms = 20
+        with self.assertRaises(AttributeError):
+            del c.size_ms
         self.assertEqual(e.checkpoint(), before)
+
+    def test_checkpoint_maximum_respects_event_time_field_domain(self):
+        s = spec()
+        s["fields"]["t"]["max"] = 50
+        e = Engine(Contract(s))
+        e.push(event(1))
+        document = json.loads(e.checkpoint())
+        document["payload"]["max_event_time"] = 100
+        document["payload"]["watermark"] = 90
+        document["payload"]["windows"][0]["start_ms"] = 100
+        with self.assertRaises(CheckpointError):
+            Engine.restore(e.contract, self.rehash(document))
 
     def test_contract_export_is_detached(self):
         original = spec()

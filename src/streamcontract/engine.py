@@ -278,7 +278,9 @@ class Engine:
             if stats["accepted"] == 0:
                 if maximum is not None or watermark is not None:
                     raise CheckpointError("empty state has watermark")
-            elif type(maximum) is not int or not 0 <= maximum <= MAX_TIME or type(watermark) is not int or watermark != maximum - contract.delay_ms:
+            elif (type(maximum) is not int or not 0 <= maximum <= MAX_TIME
+                  or contract.fields[contract.event_time].check(maximum) is not None
+                  or type(watermark) is not int or watermark != maximum - contract.delay_ms):
                 raise CheckpointError("inconsistent checkpoint watermark")
             if type(payload["finished"]) is not bool:
                 raise CheckpointError("invalid finished state")

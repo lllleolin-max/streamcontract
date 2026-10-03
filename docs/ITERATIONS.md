@@ -78,4 +78,21 @@ Ran 32 tests in 2.286s
 FAILED (failures=1, errors=1)
 ```
 
-Correction: source metadata shape/sequence/digest checked before encoding or writing; CLI rejects resolved or hardlink checkpoint aliases of input/contract before opening input; contract file reads are also limited to 1 MiB + 1 byte. Verification rebuild/force reinstall and full suite: 33 tests OK, including hardlink alias/source byte preservation. After: recorded by the fourth code commit and linked in the final evidence entry. Remaining boundary: hostile concurrent path replacement is not an OS sandbox; append-only source and trusted checkpoint directory are required.
+Correction: source metadata shape/sequence/digest checked before encoding or writing; CLI rejects resolved or hardlink checkpoint aliases of input/contract before opening input; contract file reads are also limited to 1 MiB + 1 byte. Verification rebuild/force reinstall and full suite: 33 tests OK, including hardlink alias/source byte preservation. After: `bc5222d832245d73372959884fe10146a04ea47a`. Remaining boundary: hostile concurrent path replacement is not an OS sandbox; append-only source and trusted checkpoint directory are required.
+
+## Additional round 5 — remaining immutable/domain edges
+
+Before: `bc5222d832245d73372959884fe10146a04ea47a`. Final API review found normal attribute deletion was not blocked by the assignment freeze; `del contract.size_ms` could invalidate a compiled contract. Checkpoint maximum time also used a generic integer range rather than the declared event-time field's own upper bound/enum. A rehashed state with max=100 and a declared event-time max=50 could therefore restore.
+
+Reproduction: `.venv-clean\Scripts\python.exe -m unittest discover -s tests -p test_engine.py -v`, with the extended immutable test and new maximum-domain test against the fourth-round wheel. Actual output:
+
+```text
+FAIL: test_checkpoint_maximum_respects_event_time_field_domain
+AssertionError: CheckpointError not raised
+FAIL: test_compiled_contract_cannot_change_behind_digest
+AssertionError: AttributeError not raised
+Ran 26 tests in 0.033s
+FAILED (failures=2)
+```
+
+Correction: compiled attributes reject deletion as well as assignment; restored maximum time must pass the compiled event-time field. Rebuilt wheel/clean install verification runs 34 tests and both SDK/CLI workflows plus seven contrasts. Exact fifth correction SHA and observed final verification are linked in the separate final evidence commit, so no commit attempts to embed its own hash. Plausible forged history and reflection remain outside the unkeyed integrity boundary.

@@ -110,6 +110,11 @@ class Contract:
             raise AttributeError("compiled contract is immutable; build a new Contract")
         object.__setattr__(self, name, value)
 
+    def __delattr__(self, name: str) -> None:
+        if getattr(self, "_frozen", False):
+            raise AttributeError("compiled contract is immutable; build a new Contract")
+        object.__delattr__(self, name)
+
     def __init__(self, spec: dict):
         try:
             self._compile(spec)
